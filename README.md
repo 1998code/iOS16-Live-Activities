@@ -15,6 +15,10 @@ Learn More: https://developer.apple.com/news/?id=hi37aek8
 https://twitter.com/1998design/status/1552681295607566336?s=21&t=waceX8VvaP-VCGc2KJmHpw
 https://twitter.com/1998design/status/1552686498276814848?s=21&t=waceX8VvaP-VCGc2KJmHpw
 
+## Environment
+- iOS 16 beta 4 or above
+- Xcode 14 beta 4 or above
+
 ## Usage
 ### Import
 ```swift
