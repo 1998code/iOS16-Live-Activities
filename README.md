@@ -63,7 +63,7 @@ func showAllDeliveries() {
     }
 }
 ```
-Gist: https://gist.github.com/1998code/f32848acf22dc776b168f82cd68e8c61#file-pizzafunction-swift
+Gist: https://gist.github.com/1998code/f32848acf22dc776b168f82cd68e8c61
 
 ```swift
 import ActivityKit
@@ -111,6 +111,7 @@ struct PizzaDeliveryActivityWidget: Widget {
     }
 }
 ```
+https://gist.github.com/1998code/fea1227e866bc8c9a82ed1dc9654cdc3
 
 ## Resources
 https://developer.apple.com/documentation/activitykit/displaying-live-data-on-the-lock-screen-with-live-activities
