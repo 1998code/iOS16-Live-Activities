@@ -111,7 +111,7 @@ struct PizzaDeliveryActivityWidget: Widget {
     }
 }
 ```
-https://gist.github.com/1998code/fea1227e866bc8c9a82ed1dc9654cdc3
+Gist: https://gist.github.com/1998code/fea1227e866bc8c9a82ed1dc9654cdc3
 
 ## Resources
 https://developer.apple.com/documentation/activitykit/displaying-live-data-on-the-lock-screen-with-live-activities
