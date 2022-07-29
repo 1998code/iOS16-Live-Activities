@@ -19,3 +19,13 @@ struct PizzaDeliveryAttributes: ActivityAttributes {
     var numberOfPizzas: Int
     var totalAmount: String
 }
+
+struct PizzaAdAttributes: ActivityAttributes {
+    public typealias PizzaAdStatus = ContentState
+
+    public struct ContentState: Codable, Hashable {
+        var adName: String
+        var showTime: Date
+    }
+    var discount: String
+}

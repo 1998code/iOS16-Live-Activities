@@ -16,8 +16,8 @@
 		3A34C50D2892C432003EB69F /* WidgetDemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A34C50C2892C432003EB69F /* WidgetDemo.swift */; };
 		3A34C50F2892C433003EB69F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3A34C50E2892C433003EB69F /* Assets.xcassets */; };
 		3A34C5132892C433003EB69F /* WidgetDemoExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 3A34C5052892C432003EB69F /* WidgetDemoExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		3AC6C11E2893968A001B44DC /* PizzaDeliveryAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC6C11D2893968A001B44DC /* PizzaDeliveryAttributes.swift */; };
-		3AC6C11F2893968F001B44DC /* PizzaDeliveryAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC6C11D2893968A001B44DC /* PizzaDeliveryAttributes.swift */; };
+		3AC6C11E2893968A001B44DC /* ActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC6C11D2893968A001B44DC /* ActivityAttributes.swift */; };
+		3AC6C11F2893968F001B44DC /* ActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC6C11D2893968A001B44DC /* ActivityAttributes.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,7 +57,7 @@
 		3A34C50E2892C433003EB69F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3A34C5102892C433003EB69F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3A36686F2892CB94003F048E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		3AC6C11D2893968A001B44DC /* PizzaDeliveryAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PizzaDeliveryAttributes.swift; sourceTree = "<group>"; };
+		3AC6C11D2893968A001B44DC /* ActivityAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityAttributes.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,7 +105,7 @@
 				3A36686F2892CB94003F048E /* Info.plist */,
 				3A34C4F32892C3A0003EB69F /* iOS16_Live_ActivitiesApp.swift */,
 				3A34C4F52892C3A0003EB69F /* ContentView.swift */,
-				3AC6C11D2893968A001B44DC /* PizzaDeliveryAttributes.swift */,
+				3AC6C11D2893968A001B44DC /* ActivityAttributes.swift */,
 				3A34C4F72892C3A2003EB69F /* Assets.xcassets */,
 				3A34C4F92892C3A2003EB69F /* Preview Content */,
 			);
@@ -240,7 +240,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3AC6C11E2893968A001B44DC /* PizzaDeliveryAttributes.swift in Sources */,
+				3AC6C11E2893968A001B44DC /* ActivityAttributes.swift in Sources */,
 				3A34C4F62892C3A0003EB69F /* ContentView.swift in Sources */,
 				3A34C4F42892C3A0003EB69F /* iOS16_Live_ActivitiesApp.swift in Sources */,
 			);
@@ -251,7 +251,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3A34C50D2892C432003EB69F /* WidgetDemo.swift in Sources */,
-				3AC6C11F2893968F001B44DC /* PizzaDeliveryAttributes.swift in Sources */,
+				3AC6C11F2893968F001B44DC /* ActivityAttributes.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

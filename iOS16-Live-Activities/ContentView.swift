@@ -24,6 +24,9 @@ struct ContentView: View {
             .toolbar {
                 ToolbarItemGroup(placement: .navigationBarLeading) {
                     Text("For Apple Developers").bold()
+                        .onTapGesture {
+                            startPizzaAd()
+                        }
                 }
             }
             .preferredColorScheme(.dark)
@@ -109,6 +112,20 @@ struct ContentView: View {
             for activity in Activity<PizzaDeliveryAttributes>.activities {
                 print("Pizza delivery details: \(activity.id) -> \(activity.attributes)")
             }
+        }
+    }
+    
+    func startPizzaAd() {
+        let pizzaAdAttributes = PizzaAdAttributes(discount: "$100")
+        let initialContentState = PizzaAdAttributes.PizzaAdStatus(adName: "TIM 👨🏻‍🍳 's Pizza Offer", showTime: Date().addingTimeInterval(60 * 60))
+        do {
+            let deliveryActivity = try Activity<PizzaAdAttributes>.request(
+                attributes: pizzaAdAttributes,
+                contentState: initialContentState,
+                pushType: nil)
+            print("Requested a pizza ad Live Activity \(deliveryActivity.id)")
+        } catch (let error) {
+            print("Error requesting pizza ad Live Activity \(error.localizedDescription)")
         }
     }
 }

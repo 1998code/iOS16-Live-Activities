@@ -13,6 +13,7 @@ import SwiftUI
 struct Widgets: WidgetBundle {
    var body: some Widget {
        PizzaDeliveryActivityWidget()
+       PizzaAdActivityWidget()
    }
 }
 
@@ -49,3 +50,19 @@ struct PizzaDeliveryActivityWidget: Widget {
         }
     }
 }
+
+
+struct PizzaAdActivityWidget: Widget {
+    var body: some WidgetConfiguration {
+        ActivityConfiguration(attributesType: PizzaAdAttributes.self) { context in
+            VStack {
+                Text("\(context.state.adName)").font(.caption).foregroundColor(.secondary)
+                VStack {
+                    Text("Get \(Text(context.attributes.discount).fontWeight(.black).foregroundColor(.blue)) OFF").bold().font(.system(size: 50)).foregroundColor(.secondary)
+                    Text("when purchase 🍕 every $1,000 | ONLY TODAY").font(.callout).italic()
+                }
+            }.padding()
+        }
+    }
+}
+
