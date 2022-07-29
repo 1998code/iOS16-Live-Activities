@@ -20,7 +20,7 @@ https://twitter.com/1998design/status/1552686498276814848?s=21&t=waceX8VvaP-VCGc
 
 ## Usage
 ### Info.plist
-Add NSSupportsLiveActivities key and set YES.
+Add `NSSupportsLiveActivities` key and set to `YES`.
 ### Import
 ```swift
 import ActivityKit
