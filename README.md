@@ -18,6 +18,9 @@ https://twitter.com/1998design/status/1552686498276814848?s=21&t=waceX8VvaP-VCGc
 - iOS 16 beta 4 or above
 - Xcode 14 beta 4 or above
 
+## Tutorial
+Medium: https://1998design.medium.com/how-to-create-live-activities-widget-for-ios-16-2c07889f1235
+
 ## Usage
 ### Info.plist
 Add `NSSupportsLiveActivities` key and set to `YES`.
@@ -25,7 +28,7 @@ Add `NSSupportsLiveActivities` key and set to `YES`.
 ```swift
 import ActivityKit
 ```
-### Activity Attributes
+### Activity Attributes (Targeted to both App and Widget)
 ```swift
 struct PizzaDeliveryAttributes: ActivityAttributes {
     public typealias PizzaDeliveryStatus = ContentState
@@ -39,6 +42,7 @@ struct PizzaDeliveryAttributes: ActivityAttributes {
     var totalAmount: String
 }
 ```
+Gist: https://gist.github.com/1998code/c58a0e53ce1eae2ba5f0549ae6d9a370
 ### Functions (Start / Update / Stop / Show ALL)
 ```swift
 func startDeliveryPizza() {
