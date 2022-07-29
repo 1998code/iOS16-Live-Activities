@@ -3,10 +3,9 @@
 # iOS16 Live Activities ( ActivityKit Demo)
 ### SwiftPizza 🍕👨🏻‍🍳 App for Apple ActivityKit &amp; WidgetKit
 
-This is the first project example referring to the latest Apple ActivityKit release.
+This is the first project example referring to the <a href="https://developer.apple.com/news/?id=hi37aek8">latest Apple ActivityKit beta release</a>.
 
-Live Activities will help you follow an ongoing activity right from your Lock Screen, so you can track the progress of your food delivery or use the Now Playing controls without unlocking your device.
-Learn More: https://developer.apple.com/news/?id=hi37aek8
+> Live Activities will help you follow an ongoing activity right from your Lock Screen, so you can track the progress of your food delivery or use the Now Playing controls without unlocking your device.
 
 ## Preview
 ![CleanShot 2022-07-29 at 13 37 05](https://user-images.githubusercontent.com/54872601/181690034-bf5b5c58-16c2-45e7-8ef3-57899b0bf208.gif)
@@ -15,11 +14,36 @@ Learn More: https://developer.apple.com/news/?id=hi37aek8
 https://twitter.com/1998design/status/1552681295607566336?s=21&t=waceX8VvaP-VCGc2KJmHpw
 https://twitter.com/1998design/status/1552686498276814848?s=21&t=waceX8VvaP-VCGc2KJmHpw
 
+## Environment
+- iOS 16 beta 4 or above
+- Xcode 14 beta 4 or above
+
+## Tutorial
+Medium: https://1998design.medium.com/how-to-create-live-activities-widget-for-ios-16-2c07889f1235
+
 ## Usage
+### Info.plist
+Add `NSSupportsLiveActivities` key and set to `YES`.
+### Import
 ```swift
 import ActivityKit
 ```
+### Activity Attributes (Targeted to both App and Widget)
+```swift
+struct PizzaDeliveryAttributes: ActivityAttributes {
+    public typealias PizzaDeliveryStatus = ContentState
 
+    public struct ContentState: Codable, Hashable {
+        var driverName: String
+        var estimatedDeliveryTime: Date
+    }
+
+    var numberOfPizzas: Int
+    var totalAmount: String
+}
+```
+Gist: https://gist.github.com/1998code/c58a0e53ce1eae2ba5f0549ae6d9a370
+### Functions (Start / Update / Stop / Show ALL)
 ```swift
 func startDeliveryPizza() {
     let pizzaDeliveryAttributes = PizzaDeliveryAttributes(numberOfPizzas: 1, totalAmount:"$99")
@@ -65,6 +89,7 @@ func showAllDeliveries() {
 ```
 Gist: https://gist.github.com/1998code/f32848acf22dc776b168f82cd68e8c61
 
+### Widgets
 ```swift
 import ActivityKit
 import WidgetKit
@@ -112,6 +137,16 @@ struct PizzaDeliveryActivityWidget: Widget {
 }
 ```
 Gist: https://gist.github.com/1998code/fea1227e866bc8c9a82ed1dc9654cdc3
+
+## Responses
+### Start Activity
+```swift
+// Requested a pizza delivery Live Activity DA288E1B-F6F5-4BF1-AA73-E43E0CC13150
+```
+### Show ALL Activities
+```swift
+// Pizza delivery details: DA288E1B-F6F5-4BF1-AA73-E43E0CC13150 -> PizzaDeliveryAttributes(numberOfPizzas: 1, totalAmount: "$99")
+```
 
 ## Resources
 https://developer.apple.com/documentation/activitykit/displaying-live-data-on-the-lock-screen-with-live-activities
