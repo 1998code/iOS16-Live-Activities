@@ -19,6 +19,8 @@ https://twitter.com/1998design/status/1552686498276814848?s=21&t=waceX8VvaP-VCGc
 - Xcode 14 beta 4 or above
 
 ## Usage
+### Info.plist
+Add NSSupportsLiveActivities key and set YES.
 ### Import
 ```swift
 import ActivityKit
