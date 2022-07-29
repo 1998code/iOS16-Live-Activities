@@ -1,5 +1,19 @@
+![activitykit-128x128_2x](https://user-images.githubusercontent.com/54872601/181689472-8f443ca9-4fa0-418b-b0d3-e0730883889a.png)
+
 # iOS16 Live Activities ( ActivityKit Demo)
-SwiftPizza App for Apple ActivityKit &amp; WidgetKit
+### SwiftPizza 🍕👨🏻‍🍳 App for Apple ActivityKit &amp; WidgetKit
+
+This is the first project example referring to the latest Apple ActivityKit release.
+
+Live Activities will help you follow an ongoing activity right from your Lock Screen, so you can track the progress of your food delivery or use the Now Playing controls without unlocking your device.
+Learn More: https://developer.apple.com/news/?id=hi37aek8
+
+## Preview
+![CleanShot 2022-07-29 at 13 37 05](https://user-images.githubusercontent.com/54872601/181690034-bf5b5c58-16c2-45e7-8ef3-57899b0bf208.gif)
+
+### More Videos
+https://twitter.com/1998design/status/1552681295607566336?s=21&t=waceX8VvaP-VCGc2KJmHpw
+https://twitter.com/1998design/status/1552686498276814848?s=21&t=waceX8VvaP-VCGc2KJmHpw
 
 ## Usage
 ```swift
