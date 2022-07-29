@@ -2,11 +2,11 @@
 SwiftPizza App for Apple ActivityKit &amp; WidgetKit
 
 ## Usage
-```
+```swift
 import ActivityKit
 ```
 
-```
+```swift
 func startDeliveryPizza() {
     let pizzaDeliveryAttributes = PizzaDeliveryAttributes(numberOfPizzas: 1, totalAmount:"$99")
 
@@ -49,8 +49,7 @@ func showAllDeliveries() {
     }
 }
 ```
-
-
+Gist: https://gist.github.com/1998code/f32848acf22dc776b168f82cd68e8c61#file-pizzafunction-swift
 
 ## Resources
 https://developer.apple.com/documentation/activitykit/displaying-live-data-on-the-lock-screen-with-live-activities
