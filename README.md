@@ -25,6 +25,20 @@ Add `NSSupportsLiveActivities` key and set to `YES`.
 ```swift
 import ActivityKit
 ```
+### Activity Attributes
+```swift
+struct PizzaDeliveryAttributes: ActivityAttributes {
+    public typealias PizzaDeliveryStatus = ContentState
+
+    public struct ContentState: Codable, Hashable {
+        var driverName: String
+        var estimatedDeliveryTime: Date
+    }
+
+    var numberOfPizzas: Int
+    var totalAmount: String
+}
+```
 ### Functions (Start / Update / Stop / Show ALL)
 ```swift
 func startDeliveryPizza() {
