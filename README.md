@@ -16,10 +16,11 @@ https://twitter.com/1998design/status/1552681295607566336?s=21&t=waceX8VvaP-VCGc
 https://twitter.com/1998design/status/1552686498276814848?s=21&t=waceX8VvaP-VCGc2KJmHpw
 
 ## Usage
+### Import
 ```swift
 import ActivityKit
 ```
-
+### Functions (Start / Update / Stop / Show ALL)
 ```swift
 func startDeliveryPizza() {
     let pizzaDeliveryAttributes = PizzaDeliveryAttributes(numberOfPizzas: 1, totalAmount:"$99")
@@ -65,6 +66,7 @@ func showAllDeliveries() {
 ```
 Gist: https://gist.github.com/1998code/f32848acf22dc776b168f82cd68e8c61
 
+### Widgets
 ```swift
 import ActivityKit
 import WidgetKit
@@ -112,6 +114,16 @@ struct PizzaDeliveryActivityWidget: Widget {
 }
 ```
 Gist: https://gist.github.com/1998code/fea1227e866bc8c9a82ed1dc9654cdc3
+
+## Responses
+### Start Activity
+```swift
+// Requested a pizza delivery Live Activity DA288E1B-F6F5-4BF1-AA73-E43E0CC13150
+```
+### Show ALL Activities
+```swift
+// Pizza delivery details: DA288E1B-F6F5-4BF1-AA73-E43E0CC13150 -> PizzaDeliveryAttributes(numberOfPizzas: 1, totalAmount: "$99")
+```
 
 ## Resources
 https://developer.apple.com/documentation/activitykit/displaying-live-data-on-the-lock-screen-with-live-activities
