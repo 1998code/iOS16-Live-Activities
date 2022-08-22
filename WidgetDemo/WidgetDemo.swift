@@ -66,3 +66,22 @@ struct PizzaAdActivityWidget: Widget {
     }
 }
 
+
+//struct DemoWidget: View {
+//    var body: some View {
+//        VStack {
+//            Text("Push Ads Demo").font(.caption).foregroundColor(.secondary)
+//            VStack {
+//                Text("Get $100 OFF").bold().font(.system(size: 50)).foregroundColor(.secondary)
+//                Text("when purchase 🍕 every $1,000 | ONLY TODAY").font(.caption).italic()
+//            }
+//        }
+//    }
+//}
+//
+//struct PizzaAdActivityWidget_Previews: PreviewProvider {
+//    static var previews: some View {
+//        DemoWidget()
+//            .previewContext(WidgetPreviewContext(family: .systemMedium))
+//    }
+//}
