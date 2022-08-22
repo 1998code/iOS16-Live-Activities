@@ -15,8 +15,8 @@ https://twitter.com/1998design/status/1552681295607566336?s=21&t=waceX8VvaP-VCGc
 https://twitter.com/1998design/status/1552686498276814848?s=21&t=waceX8VvaP-VCGc2KJmHpw
 
 ## Environment
-- iOS 16 beta 4 or above
-- Xcode 14 beta 4 or above
+- iOS 16 beta 4
+- Xcode 14 beta 4
 
 ## Tutorial
 Medium: https://1998design.medium.com/how-to-create-live-activities-widget-for-ios-16-2c07889f1235
