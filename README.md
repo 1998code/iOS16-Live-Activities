@@ -17,7 +17,8 @@ https://twitter.com/1998design/status/1552686498276814848?s=21&t=waceX8VvaP-VCGc
 ## Environment
 - iOS 16 beta 4*
 - Xcode 14 beta 4
-*Real Devices w/ iOS 16 beta 5-8 will crash, please use simulators instead.
+
+<i>*Real Devices on iOS 16 beta 5-8 will crash, please use simulators instead.</i>
 
 ## Tutorial
 Medium: https://1998design.medium.com/how-to-create-live-activities-widget-for-ios-16-2c07889f1235
