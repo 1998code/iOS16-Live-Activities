@@ -50,7 +50,7 @@ struct PizzaDeliveryAttributes: ActivityAttributes {
     var totalAmount: String
 }
 ```
-Gist: https://gist.github.com/1998code/c58a0e53ce1eae2ba5f0549ae6d9a370
+
 ### Functions (Start / Update / Stop / Show ALL)
 ```swift
 func startDeliveryPizza() {
