@@ -28,7 +28,6 @@ struct PizzaDeliveryActivityWidget: Widget {
                     Label("\(context.attributes.numberOfPizzas) Pizzas", systemImage: "bag")
                         .font(.title2)
                 }
-                
                 DynamicIslandExpandedRegion(.trailing) {
                     Label {
                         Text(timerInterval: context.state.estimatedDeliveryTime, countsDown: true)
@@ -41,13 +40,11 @@ struct PizzaDeliveryActivityWidget: Widget {
                     }
                     .font(.title2)
                 }
-                
                 DynamicIslandExpandedRegion(.center) {
                     Text("\(context.state.driverName) is on his way!")
                         .lineLimit(1)
                         .font(.caption)
                 }
-                
                 DynamicIslandExpandedRegion(.bottom) {
                     Button {
                         // Deep link into the app.
