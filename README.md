@@ -143,11 +143,11 @@ Gist: https://gist.github.com/1998code/fea1227e866bc8c9a82ed1dc9654cdc3
 ## Responses
 ### Start Activity
 ```swift
-// Requested a pizza delivery Live Activity DA288E1B-F6F5-4BF1-AA73-E43E0CC13150
+Console: Requested a pizza delivery Live Activity DA288E1B-F6F5-4BF1-AA73-E43E0CC13150
 ```
 ### Show ALL Activities
 ```swift
-// Pizza delivery details: DA288E1B-F6F5-4BF1-AA73-E43E0CC13150 -> PizzaDeliveryAttributes(numberOfPizzas: 1, totalAmount: "$99")
+Console: Pizza delivery details: DA288E1B-F6F5-4BF1-AA73-E43E0CC13150 -> PizzaDeliveryAttributes(numberOfPizzas: 1, totalAmount: "$99")
 ```
 
 ## Resources
