@@ -1,11 +1,14 @@
-![activitykit-128x128_2x](https://user-images.githubusercontent.com/54872601/181689472-8f443ca9-4fa0-418b-b0d3-e0730883889a.png)
+<img width="64px" src="https://user-images.githubusercontent.com/54872601/181689472-8f443ca9-4fa0-418b-b0d3-e0730883889a.png" />
 
-# iOS16 Live Activities ( ActivityKit Demo)
+# iOS16 Live Activities + Dynmaic Island 🏝️
 ### SwiftPizza 🍕👨🏻‍🍳 App for Apple ActivityKit &amp; WidgetKit
 
-This is the first project example referring to the <a href="https://developer.apple.com/news/?id=hi37aek8">latest Apple ActivityKit beta release</a>.
+This is the first project example referring to the latest <a href="https://developer.apple.com/news/?id=hi37aek8">Apple ActivityKit beta</a> and 
+<a href="https://developer.apple.com/news/?id=ttuz9vwq">Dynamic Island (NEW)</a> release.
 
 > Live Activities will help you follow an ongoing activity right from your Lock Screen, so you can track the progress of your food delivery or use the Now Playing controls without unlocking your device.
+
+> Your app’s Live Activities display on the Lock Screen and in Dynamic Island — a new design that introduces an intuitive, delightful way to experience iPhone 14 Pro and iPhone 14 Pro Max.
 
 ## Preview
 ![CleanShot 2022-07-29 at 13 37 05](https://user-images.githubusercontent.com/54872601/181690034-bf5b5c58-16c2-45e7-8ef3-57899b0bf208.gif)
