@@ -17,6 +17,7 @@ This is the first project example referring to the latest <a href="https://devel
 ### More Videos
 https://twitter.com/1998design/status/1552681295607566336?s=21&t=waceX8VvaP-VCGc2KJmHpw
 https://twitter.com/1998design/status/1552686498276814848?s=21&t=waceX8VvaP-VCGc2KJmHpw
+https://twitter.com/1998design/status/1570225193095933952?s=21&t=LoYk1Llj0cLpEhG0MBFZLw
 
 ## Environment
 - iOS 16 beta 4* ... iOS 16.1 beta 1
