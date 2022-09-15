@@ -24,7 +24,6 @@ struct PizzaDeliveryActivityWidget: Widget {
             LockScreenLiveActivityView(context: context)
         } dynamicIsland: { context in
             DynamicIsland {
-                // Create the expanded view.
                 DynamicIslandExpandedRegion(.leading) {
                     Label("\(context.attributes.numberOfPizzas) Pizzas", systemImage: "bag")
                         .font(.title2)
@@ -97,13 +96,13 @@ struct LockScreenLiveActivityView: View {
                         Image(systemName: "box.truck.badge.clock.fill").foregroundColor(.blue)
                         VStack {
                             RoundedRectangle(cornerRadius: 5)
-                                .stroke(style: StrokeStyle(lineWidth: 1, dash: [5]))
+                                .stroke(.secondary, style: StrokeStyle(lineWidth: 1, dash: [5]))
                                 .frame(height: 6)
                         }
                         Text(timerInterval: context.state.estimatedDeliveryTime, countsDown: true)
                         VStack {
                             RoundedRectangle(cornerRadius: 5)
-                                .stroke(style: StrokeStyle(lineWidth: 1, dash: [5]))
+                                .stroke(.secondary, style: StrokeStyle(lineWidth: 1, dash: [5]))
                                 .frame(height: 6)
                         }
                         Image(systemName: "house.fill").foregroundColor(.green)
