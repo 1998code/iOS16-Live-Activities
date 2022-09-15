@@ -11,7 +11,7 @@ This is the first project example referring to the latest <a href="https://devel
 > Your app’s Live Activities display on the Lock Screen and in Dynamic Island — a new design that introduces an intuitive, delightful way to experience iPhone 14 Pro and iPhone 14 Pro Max.
 
 ## Preview
-<img width="450px" src="https://user-images.githubusercontent.com/54872601/181690034-bf5b5c58-16c2-45e7-8ef3-57899b0bf208.gif" /> <img width="450px" src="https://user-images.githubusercontent.com/54872601/190294592-0e019d65-0b37-4636-a8af-49a49cc3657b.gif" />
+<img width="400px" src="https://user-images.githubusercontent.com/54872601/181690034-bf5b5c58-16c2-45e7-8ef3-57899b0bf208.gif" /> <img width="400px" src="https://user-images.githubusercontent.com/54872601/190294592-0e019d65-0b37-4636-a8af-49a49cc3657b.gif" />
 
 
 ### More Videos
