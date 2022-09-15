@@ -43,7 +43,7 @@ struct PizzaDeliveryActivityWidget: Widget {
                 }
                 
                 DynamicIslandExpandedRegion(.center) {
-                    Text("\(context.state.driverName) is on their way!")
+                    Text("\(context.state.driverName) is on his way!")
                         .lineLimit(1)
                         .font(.caption)
                 }
