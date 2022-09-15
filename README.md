@@ -41,7 +41,8 @@ struct PizzaDeliveryAttributes: ActivityAttributes {
 
     public struct ContentState: Codable, Hashable {
         var driverName: String
-        var estimatedDeliveryTime: Date
+        // Changed from Date to ClosedRange<Date> - 16.1
+        var estimatedDeliveryTime: ClosedRange<Date>
     }
 
     var numberOfPizzas: Int
@@ -53,8 +54,8 @@ Gist: https://gist.github.com/1998code/c58a0e53ce1eae2ba5f0549ae6d9a370
 ```swift
 func startDeliveryPizza() {
     let pizzaDeliveryAttributes = PizzaDeliveryAttributes(numberOfPizzas: 1, totalAmount:"$99")
-
-    let initialContentState = PizzaDeliveryAttributes.PizzaDeliveryStatus(driverName: "TIM 👨🏻‍🍳", estimatedDeliveryTime: Date().addingTimeInterval(15 * 60))
+    // Date() changed to Date()...Date() - 16.1
+    let initialContentState = PizzaDeliveryAttributes.PizzaDeliveryStatus(driverName: "TIM 👨🏻‍🍳", estimatedDeliveryTime: Date()...Date().addingTimeInterval(15 * 60))
 
     do {
         let deliveryActivity = try Activity<PizzaDeliveryAttributes>.request(
@@ -69,7 +70,8 @@ func startDeliveryPizza() {
 
 func updateDeliveryPizza() {
     Task {
-        let updatedDeliveryStatus = PizzaDeliveryAttributes.PizzaDeliveryStatus(driverName: "TIM 👨🏻‍🍳", estimatedDeliveryTime: Date().addingTimeInterval(60 * 60))
+        // Date() changed to Date()...Date() - 16.1
+        let updatedDeliveryStatus = PizzaDeliveryAttributes.PizzaDeliveryStatus(driverName: "TIM 👨🏻‍🍳", estimatedDeliveryTime: Date()...Date().addingTimeInterval(60 * 60))
 
         for activity in Activity<PizzaDeliveryAttributes>.activities{
             await activity.update(using: updatedDeliveryStatus)
@@ -93,7 +95,6 @@ func showAllDeliveries() {
     }
 }
 ```
-Gist: https://gist.github.com/1998code/f32848acf22dc776b168f82cd68e8c61
 
 ### Widgets
 ```swift
@@ -110,7 +111,8 @@ struct Widgets: WidgetBundle {
 
 struct PizzaDeliveryActivityWidget: Widget {
     var body: some WidgetConfiguration {
-        ActivityConfiguration(attributesType: PizzaDeliveryAttributes.self) { context in
+        // attributesType changed to for - 16.1
+        ActivityConfiguration(for: PizzaDeliveryAttributes.self) { context in
             VStack(alignment: .leading) {
                 HStack {
                     VStack(alignment: .leading) {
@@ -122,13 +124,13 @@ struct PizzaDeliveryActivityWidget: Widget {
                             Image(systemName: "box.truck.badge.clock.fill").foregroundColor(.blue)
                             VStack {
                                 RoundedRectangle(cornerRadius: 5)
-                                    .stroke(style: StrokeStyle(lineWidth: 1, dash: [5]))
+                                    .stroke(.secondary, style: StrokeStyle(lineWidth: 1, dash: [5]))
                                     .frame(height: 6)
                             }
-                            Text(context.state.estimatedDeliveryTime, style: .timer)
+                            Text(timerInterval: context.state.estimatedDeliveryTime, countsDown: true)
                             VStack {
                                 RoundedRectangle(cornerRadius: 5)
-                                    .stroke(style: StrokeStyle(lineWidth: 1, dash: [5]))
+                                    .stroke(.secondary, style: StrokeStyle(lineWidth: 1, dash: [5]))
                                     .frame(height: 6)
                             }
                             Image(systemName: "house.fill").foregroundColor(.green)
@@ -139,10 +141,62 @@ struct PizzaDeliveryActivityWidget: Widget {
                 Text("You've already paid: \(context.attributes.totalAmount) + $9.9 Delivery Fee 💸").font(.caption).foregroundColor(.secondary)
             }.padding(15)
         }
+        // NEW 16.1
+        dynamicIsland: { context in
+            DynamicIsland {
+                DynamicIslandExpandedRegion(.leading) {
+                    Label("\(context.attributes.numberOfPizzas) Pizzas", systemImage: "bag")
+                        .font(.title2)
+                }
+                DynamicIslandExpandedRegion(.trailing) {
+                    Label {
+                        Text(timerInterval: context.state.estimatedDeliveryTime, countsDown: true)
+                            .multilineTextAlignment(.trailing)
+                            .frame(width: 50)
+                            .monospacedDigit()
+                            .font(.caption2)
+                    } icon: {
+                        Image(systemName: "timer")
+                    }
+                    .font(.title2)
+                }
+                DynamicIslandExpandedRegion(.center) {
+                    Text("\(context.state.driverName) is on his way!")
+                        .lineLimit(1)
+                        .font(.caption)
+                }
+                DynamicIslandExpandedRegion(.bottom) {
+                    Button {
+                        // Deep link into the app.
+                    } label: {
+                        Label("Contact driver", systemImage: "phone")
+                    }
+                }
+            } compactLeading: {
+                Label {
+                    Text("\(context.attributes.numberOfPizzas) Pizzas")
+                } icon: {
+                    Image(systemName: "bag")
+                }
+                .font(.caption2)
+            } compactTrailing: {
+                Text(timerInterval: context.state.estimatedDeliveryTime, countsDown: true)
+                    .multilineTextAlignment(.center)
+                    .frame(width: 40)
+                    .font(.caption2)
+            } minimal: {
+                VStack(alignment: .center) {
+                    Image(systemName: "timer")
+                    Text(timerInterval: context.state.estimatedDeliveryTime, countsDown: true)
+                        .multilineTextAlignment(.center)
+                        .monospacedDigit()
+                        .font(.caption2)
+                }
+            }
+            .keylineTint(.cyan)
     }
 }
 ```
-Gist: https://gist.github.com/1998code/fea1227e866bc8c9a82ed1dc9654cdc3
 
 ## Responses
 ### Start Activity
