@@ -13,7 +13,7 @@ struct PizzaDeliveryAttributes: ActivityAttributes {
 
     public struct ContentState: Codable, Hashable {
         var driverName: String
-        var estimatedDeliveryTime: Date
+        var estimatedDeliveryTime: ClosedRange<Date>
     }
 
     var numberOfPizzas: Int

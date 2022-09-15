@@ -79,7 +79,7 @@ struct ContentView: View {
     func startDeliveryPizza() {
         let pizzaDeliveryAttributes = PizzaDeliveryAttributes(numberOfPizzas: 1, totalAmount:"$99")
 
-        let initialContentState = PizzaDeliveryAttributes.PizzaDeliveryStatus(driverName: "TIM 👨🏻‍🍳", estimatedDeliveryTime: Date().addingTimeInterval(15 * 60))
+        let initialContentState = PizzaDeliveryAttributes.PizzaDeliveryStatus(driverName: "TIM 👨🏻‍🍳", estimatedDeliveryTime: Date()...Date().addingTimeInterval(15 * 60))
                                                   
         do {
             let deliveryActivity = try Activity<PizzaDeliveryAttributes>.request(
@@ -93,7 +93,7 @@ struct ContentView: View {
     }
     func updateDeliveryPizza() {
         Task {
-            let updatedDeliveryStatus = PizzaDeliveryAttributes.PizzaDeliveryStatus(driverName: "TIM 👨🏻‍🍳", estimatedDeliveryTime: Date().addingTimeInterval(60 * 60))
+            let updatedDeliveryStatus = PizzaDeliveryAttributes.PizzaDeliveryStatus(driverName: "TIM 👨🏻‍🍳", estimatedDeliveryTime: Date()...Date().addingTimeInterval(60 * 60))
             
             for activity in Activity<PizzaDeliveryAttributes>.activities{
                 await activity.update(using: updatedDeliveryStatus)
