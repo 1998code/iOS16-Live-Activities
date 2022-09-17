@@ -26,7 +26,7 @@ https://twitter.com/1998design/status/1570225193095933952?s=21&t=LoYk1Llj0cLpEhG
 <i>*Real Devices on iOS 16 beta 5-8, RC, GM will crash, please use simulators instead.</i>
 
 ## Tutorial
-Dynamic Island: https://1998design.medium.com/how-to-create-dynamic-island-widgets-on-ios-16-1-or-above-dca0a7dd1483
+Dynamic Island: https://1998design.medium.com/how-to-create-dynamic-island-widgets-on-ios-16-1-or-above-dca0a7dd1483 <br/>
 Live Activities: https://1998design.medium.com/how-to-create-live-activities-widget-for-ios-16-2c07889f1235
 
 ## Usage
