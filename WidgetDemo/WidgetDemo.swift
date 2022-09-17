@@ -171,7 +171,7 @@ struct PizzaAdActivityWidget: Widget {
     }
 }
 
-
+// If you wish to preview the widget:
 struct DemoWidget: View {
     var body: some View {
         VStack {
