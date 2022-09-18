@@ -210,6 +210,18 @@ Console: Requested a pizza delivery Live Activity DA288E1B-F6F5-4BF1-AA73-E43E0C
 Console: Pizza delivery details: DA288E1B-F6F5-4BF1-AA73-E43E0CC13150 -> PizzaDeliveryAttributes(numberOfPizzas: 1, totalAmount: "$99")
 ```
 
+## How to pass image data to the widget
+1. YES. Use Local Assets Folder <br/>
+    a. Advantage: Easy to implement <br/>
+       May possible to change image (string name) when updating the event
+    b. Bad: Limited options and big app size. <br/>
+            If you need to add more image sets, then re-upload to App Store is required (Time wasting, and not all users can get the instant update)<br/>
+2. YES. Load the image from the Internet, and pass the data to the widget via App Group and AppStorage (aka UserDefaults)<br/>
+    a. Advantage: Can update in any time as the url can be changed / modify remotely.<br/>
+       No need to store in Assets Folder and reduced app size.<br/>
+    b. Limitation: Unless the user re-open the app, the image cannot be updated in the background.
+3. NO. Async Image (Known not working)
+
 ## Resources
 https://developer.apple.com/documentation/activitykit/displaying-live-data-on-the-lock-screen-with-live-activities
 
