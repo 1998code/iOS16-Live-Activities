@@ -57,6 +57,8 @@
 		3A34C50E2892C433003EB69F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3A34C5102892C433003EB69F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3A36686F2892CB94003F048E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		3A8D01A528D6C067001A1AFD /* iOS16-Live-Activities.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "iOS16-Live-Activities.entitlements"; sourceTree = "<group>"; };
+		3A8D01A628D6C0A8001A1AFD /* WidgetDemoExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WidgetDemoExtension.entitlements; sourceTree = "<group>"; };
 		3AC6C11D2893968A001B44DC /* ActivityAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityAttributes.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -83,6 +85,7 @@
 		3A34C4E72892C3A0003EB69F = {
 			isa = PBXGroup;
 			children = (
+				3A8D01A628D6C0A8001A1AFD /* WidgetDemoExtension.entitlements */,
 				3A34C4F22892C3A0003EB69F /* iOS16-Live-Activities */,
 				3A34C50B2892C432003EB69F /* WidgetDemo */,
 				3A34C5062892C432003EB69F /* Frameworks */,
@@ -102,6 +105,7 @@
 		3A34C4F22892C3A0003EB69F /* iOS16-Live-Activities */ = {
 			isa = PBXGroup;
 			children = (
+				3A8D01A528D6C067001A1AFD /* iOS16-Live-Activities.entitlements */,
 				3A36686F2892CB94003F048E /* Info.plist */,
 				3A34C4F32892C3A0003EB69F /* iOS16_Live_ActivitiesApp.swift */,
 				3A34C4F52892C3A0003EB69F /* ContentView.swift */,
@@ -386,6 +390,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "iOS16-Live-Activities/iOS16-Live-Activities.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"iOS16-Live-Activities/Preview Content\"";
@@ -404,7 +409,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "apple.iOS16-Live-Activities";
+				PRODUCT_BUNDLE_IDENTIFIER = "io.startway.iOS16-Live-Activities";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -418,6 +423,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "iOS16-Live-Activities/iOS16-Live-Activities.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"iOS16-Live-Activities/Preview Content\"";
@@ -436,7 +442,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "apple.iOS16-Live-Activities";
+				PRODUCT_BUNDLE_IDENTIFIER = "io.startway.iOS16-Live-Activities";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -449,6 +455,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = WidgetDemoExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 9PAHLTG8AD;
@@ -463,7 +470,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "apple.iOS16-Live-Activities.WidgetDemo";
+				PRODUCT_BUNDLE_IDENTIFIER = "io.startway.iOS16-Live-Activities.WidgetDemo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -477,6 +484,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = WidgetDemoExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 9PAHLTG8AD;
@@ -491,7 +499,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "apple.iOS16-Live-Activities.WidgetDemo";
+				PRODUCT_BUNDLE_IDENTIFIER = "io.startway.iOS16-Live-Activities.WidgetDemo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;

@@ -107,11 +107,19 @@ struct PizzaDeliveryActivityWidget: Widget {
 struct PizzaAdActivityWidget: Widget {
     var body: some WidgetConfiguration {
         ActivityConfiguration(for: PizzaAdAttributes.self) { context in
-            VStack {
-                Text(context.state.adName).font(.caption).foregroundColor(.secondary)
-                VStack {
-                    Text("Get \(Text(context.attributes.discount).fontWeight(.black).foregroundColor(.blue)) OFF").bold().font(.system(size: 50)).foregroundColor(.secondary)
-                    Text("when purchase 🍕 every $1,000 | ONLY TODAY").font(.callout).italic()
+            HStack {
+                let logo = UserDefaults(suiteName: "group.io.startway.iOS16-Live-Activities")?.data(forKey: "pizzaLogo")
+                if (logo != nil) {
+                    Image(uiImage: UIImage(data: logo!)!)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 64, height: 64)
+                        .cornerRadius(15)
+                }
+                VStack(alignment: .leading) {
+                    Text(context.state.adName).font(.caption).foregroundColor(.secondary)
+                    Text("Get \(Text(context.attributes.discount).fontWeight(.black).foregroundColor(.blue)) OFF").bold().font(.system(size: 25)).foregroundColor(.secondary)
+                    Text("when purchase 🍕 every $1,000 TODAY").font(.callout).italic()
                 }
             }.padding()
         } dynamicIsland: { context in

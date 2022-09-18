@@ -115,7 +115,15 @@ struct ContentView: View {
         }
     }
     
+    @MainActor
     func startPizzaAd() {
+        // Fetch image from Internet and convert it to jpegData
+        let url = URL(string: "https://img.freepik.com/premium-vector/pizza-logo-design_9845-319.jpg?w=2000")!
+        let data = try! Data(contentsOf: url)
+        let image = UIImage(data: data)!
+        let jpegData = image.jpegData(compressionQuality: 1.0)!
+        UserDefaults(suiteName: "group.io.startway.iOS16-Live-Activities")?.set(jpegData, forKey: "pizzaLogo")
+
         let pizzaAdAttributes = PizzaAdAttributes(discount: "$100")
         let initialContentState = PizzaAdAttributes.PizzaAdStatus(adName: "TIM 👨🏻‍🍳 's Pizza Offer", showTime: Date().addingTimeInterval(60 * 60))
         do {
