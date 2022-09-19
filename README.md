@@ -211,8 +211,8 @@ Console: Pizza delivery details: DA288E1B-F6F5-4BF1-AA73-E43E0CC13150 -> PizzaDe
 ## How to pass image data to the widget
 1. YES. Use Local Assets Folder <br/>
     a. Advantage: Easy to implement <br/>
-       May possible to change image (string name) when updating the event
-    b. Bad: Limited options and big app size. <br/>
+       May possible to change image (string name) when updating the event<br/>
+    b. Bad: Limited options and big app size.<br/>
             If you need to add more image sets, then re-upload to App Store is required (Time wasting, and not all users can get the instant update)<br/>
 2. YES. Load the image from the Internet, and pass the data to the widget via App Group and AppStorage (aka UserDefaults)<br/>
     a. Advantage: Can update in any time as the url can be changed / modify remotely.<br/>
