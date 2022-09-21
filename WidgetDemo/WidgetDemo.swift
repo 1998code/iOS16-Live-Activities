@@ -20,33 +20,54 @@ struct Widgets: WidgetBundle {
 struct PizzaDeliveryActivityWidget: Widget {
     var body: some WidgetConfiguration {
         ActivityConfiguration(for: PizzaDeliveryAttributes.self) { context in
-            // Create the view that appears on the Lock Screen and as a banner on the Home Screen of devices that don't support the Dynamic Island.
+            // For devices that don't support the Dynamic Island.
             VStack(alignment: .leading) {
                 HStack {
                     VStack(alignment: .leading) {
-                        Text("\(context.state.driverName) is on the way!").font(.headline)
-                        HStack {
-                            VStack {
-                                Divider().frame(height: 6).overlay(.blue).cornerRadius(5)
+                        Text("Your \(context.state.driverName) is on the way!")
+                            .font(.headline)
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 15)
+                                .fill(.secondary)
+                            HStack {
+                                RoundedRectangle(cornerRadius: 15)
+                                    .fill(.blue)
+                                    .frame(width: 50)
+                                Image(systemName: "shippingbox.circle.fill")
+                                    .foregroundColor(.white)
+                                    .padding(.leading, -25)
+                                Image(systemName: "arrow.forward")
+                                    .foregroundColor(.white.opacity(0.5))
+                                Image(systemName: "ellipsis")
+                                    .foregroundColor(.white.opacity(0.5))
+                                Text(timerInterval: context.state.estimatedDeliveryTime, countsDown: true)
+                                    .bold()
+                                    .font(.caption)
+                                    .foregroundColor(.white.opacity(0.8))
+                                    .multilineTextAlignment(.center)
+                                Image(systemName: "ellipsis")
+                                    .foregroundColor(.white.opacity(0.5))
+                                Image(systemName: "arrow.forward")
+                                    .foregroundColor(.white.opacity(0.5))
+                                Image(systemName: "house.circle.fill")
+                                    .foregroundColor(.green)
+                                    .background(.white)
+                                    .clipShape(Circle())
                             }
-                            Image(systemName: "box.truck.badge.clock.fill").foregroundColor(.blue)
-                            VStack {
-                                RoundedRectangle(cornerRadius: 5)
-                                    .stroke(.secondary, style: StrokeStyle(lineWidth: 1, dash: [5]))
-                                    .frame(height: 6)
-                            }
-                            Text(timerInterval: context.state.estimatedDeliveryTime, countsDown: true)
-                            VStack {
-                                RoundedRectangle(cornerRadius: 5)
-                                    .stroke(.secondary, style: StrokeStyle(lineWidth: 1, dash: [5]))
-                                    .frame(height: 6)
-                            }
-                            Image(systemName: "house.fill").foregroundColor(.green)
                         }
-                    }.padding(.trailing, 25)
-                    Text("\(context.attributes.numberOfPizzas) 🍕").font(.title).bold()
+                    }
+                    Spacer()
+                    VStack {
+                        Text("\(context.attributes.numberOfPizzas) 🍕")
+                            .font(.title)
+                            .bold()
+                        Spacer()
+                    }
                 }.padding(5)
-                Text("You've already paid: \(context.attributes.totalAmount) + $9.9 Delivery Fee 💸").font(.caption).foregroundColor(.secondary)
+                Text("You've already paid: \(context.attributes.totalAmount) + $9.9 Delivery Fee 💸")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding(.horizontal, 5)
             }.padding(15)
         } dynamicIsland: { context in
             DynamicIsland {
