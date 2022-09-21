@@ -1,6 +1,6 @@
 <img width="64px" src="https://user-images.githubusercontent.com/54872601/181689472-8f443ca9-4fa0-418b-b0d3-e0730883889a.png" />
 
-# iOS16 Live Activities + Dynmaic Island 🏝️
+# iOS16 Live Activities + Dynamic Island 🏝️
 ### SwiftPizza 🍕👨🏻‍🍳 App for Apple ActivityKit &amp; WidgetKit
 
 This is the first project example referring to the latest <a href="https://developer.apple.com/news/?id=hi37aek8">Apple ActivityKit beta</a> and 
@@ -22,8 +22,6 @@ https://twitter.com/1998design/status/1570225193095933952?s=21&t=LoYk1Llj0cLpEhG
 ## Environment
 - iOS 16.1 beta 1
 - Xcode 14.1 beta 1
-
-<i>*Real Devices on iOS 16 beta 5-8, RC, GM will crash, please use simulators instead.</i>
 
 ## Tutorial
 Dynamic Island: https://1998design.medium.com/how-to-create-dynamic-island-widgets-on-ios-16-1-or-above-dca0a7dd1483 <br/>
@@ -209,6 +207,18 @@ Console: Requested a pizza delivery Live Activity DA288E1B-F6F5-4BF1-AA73-E43E0C
 ```swift
 Console: Pizza delivery details: DA288E1B-F6F5-4BF1-AA73-E43E0CC13150 -> PizzaDeliveryAttributes(numberOfPizzas: 1, totalAmount: "$99")
 ```
+
+## How to pass image data to the widget
+1. YES. Use Local Assets Folder <br/>
+    a. Advantage: Easy to implement <br/>
+       May possible to change image (string name) when updating the event<br/>
+    b. Bad: Limited options and big app size.<br/>
+            If you need to add more image sets, then re-upload to App Store is required (Time wasting, and not all users can get the instant update)<br/>
+2. YES. Load the image from the Internet, and pass the data to the widget via App Group and AppStorage (aka UserDefaults)<br/>
+    a. Advantage: Can update in any time as the url can be changed / modify remotely.<br/>
+       No need to store in Assets Folder and reduced app size.<br/>
+    b. Limitation: Unless the user re-open the app, the image cannot be updated in the background.
+3. NO. Async Image (Known not working)
 
 ## Resources
 https://developer.apple.com/documentation/activitykit/displaying-live-data-on-the-lock-screen-with-live-activities
