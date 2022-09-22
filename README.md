@@ -50,7 +50,7 @@ struct PizzaDeliveryAttributes: ActivityAttributes {
 }
 ```
 
-### Functions (Start / Update / Stop / Show ALL)
+### CRUD Functions (Start / Update / Stop / Show ALL)
 ```swift
 func startDeliveryPizza() {
     let pizzaDeliveryAttributes = PizzaDeliveryAttributes(numberOfPizzas: 1, totalAmount:"$99")
