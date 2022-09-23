@@ -10,20 +10,20 @@ This is the first project example referring to the latest <a href="https://devel
 
 > Your app’s Live Activities display on the Lock Screen and in Dynamic Island — a new design that introduces an intuitive, delightful way to experience iPhone 14 Pro and iPhone 14 Pro Max.
 
-## Preview
+## Preview 📱
 <img width="400px" src="https://user-images.githubusercontent.com/54872601/181690034-bf5b5c58-16c2-45e7-8ef3-57899b0bf208.gif" /> <img width="400px" src="https://user-images.githubusercontent.com/54872601/190294592-0e019d65-0b37-4636-a8af-49a49cc3657b.gif" />
 
 
-### More Videos
+### More Videos 📼
 https://twitter.com/1998design/status/1552681295607566336?s=21&t=waceX8VvaP-VCGc2KJmHpw
 https://twitter.com/1998design/status/1552686498276814848?s=21&t=waceX8VvaP-VCGc2KJmHpw
 https://twitter.com/1998design/status/1570225193095933952?s=21&t=LoYk1Llj0cLpEhG0MBFZLw
 
-## Environment
+## Environment 🔨
 - iOS 16.1 beta 1
 - Xcode 14.1 beta 1
 
-## Tutorial
+## Tutorial 🤔
 Dynamic Island: https://1998design.medium.com/how-to-create-dynamic-island-widgets-on-ios-16-1-or-above-dca0a7dd1483 <br/>
 Live Activities: https://1998design.medium.com/how-to-create-live-activities-widget-for-ios-16-2c07889f1235
 
@@ -222,8 +222,8 @@ Console: Pizza delivery details: DA288E1B-F6F5-4BF1-AA73-E43E0CC13150 -> PizzaDe
 
 Both cases 1 & 2 are already demoed on the sample project.
 
-## Resources
+## Resources 🐋
 https://developer.apple.com/documentation/activitykit/displaying-live-data-on-the-lock-screen-with-live-activities
 
-## Legal
+## Legal 😄
 Swift® and SwiftUI® are trademarks of Apple Inc.
