@@ -220,6 +220,8 @@ Console: Pizza delivery details: DA288E1B-F6F5-4BF1-AA73-E43E0CC13150 -> PizzaDe
     b. Limitation: Unless the user re-open the app, the image cannot be updated in the background.
 3. NO. Async Image (Known not working)
 
+Both cases 1 & 2 are already demoed on the sample project.
+
 ## Resources
 https://developer.apple.com/documentation/activitykit/displaying-live-data-on-the-lock-screen-with-live-activities
 
