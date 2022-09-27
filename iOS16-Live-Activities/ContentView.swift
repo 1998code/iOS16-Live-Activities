@@ -9,7 +9,8 @@ import SwiftUI
 import ActivityKit
 
 struct ContentView: View {
-    
+    @State var showDeepLinkAction: Bool = false
+    @State var driver = ""
     // MARK: - Layout
     var body: some View {
         NavigationView {
@@ -30,6 +31,20 @@ struct ContentView: View {
                 }
             }
             .preferredColorScheme(.dark)
+            .onOpenURL(perform: { url in
+                // MARK: Handle Widgets
+                driver = url.absoluteString.replacingOccurrences(of: "pizza://", with: "")
+                showDeepLinkAction = true
+            })
+            .confirmationDialog("Call Driver", isPresented: $showDeepLinkAction)
+            {
+                Link("(800)442–4000", destination: URL(string: "tel:8004424000")!)
+                Button("Cancel", role: .cancel) {
+                    showDeepLinkAction = false
+                }
+            } message: {
+                Text("Are you sure to call \(driver)?")
+            }
         }
     }
     var bgImage: some View {

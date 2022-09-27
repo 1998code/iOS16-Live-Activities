@@ -88,16 +88,17 @@ struct PizzaDeliveryActivityWidget: Widget {
                     .font(.title2)
                 }
                 DynamicIslandExpandedRegion(.center) {
-                    Text("\(context.state.driverName) is on his way!")
+                    Text("\(context.state.driverName) is on the way!")
                         .lineLimit(1)
                         .font(.caption)
+                        .foregroundColor(.secondary)
                 }
                 DynamicIslandExpandedRegion(.bottom) {
-                    Button {
-                        // Deep link into the app.
-                    } label: {
-                        Label("Contact driver", systemImage: "phone")
-                    }
+                    // Deep Linking test
+                     Link(destination: URL(string: "pizza://TIM")!) {
+                         Label("Contact driver", systemImage: "phone").padding()
+                     }.background(Color.accentColor)
+                     .clipShape(RoundedRectangle(cornerRadius: 15))
                 }
             } compactLeading: {
                 Label {
