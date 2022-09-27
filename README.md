@@ -203,6 +203,10 @@ struct PizzaDeliveryActivityWidget: Widget {
 ```swift
 Console: Requested a pizza delivery Live Activity DA288E1B-F6F5-4BF1-AA73-E43E0CC13150
 ```
+### Update Activity
+```swift
+Updating content state for activity DA288E1B-F6F5-4BF1-AA73-E43E0CC13150
+```
 ### Show ALL Activities
 ```swift
 Console: Pizza delivery details: DA288E1B-F6F5-4BF1-AA73-E43E0CC13150 -> PizzaDeliveryAttributes(numberOfPizzas: 1, totalAmount: "$99")
