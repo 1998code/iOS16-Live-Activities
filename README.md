@@ -193,7 +193,7 @@ struct PizzaDeliveryActivityWidget: Widget {
                         .font(.caption2)
                 }
             }
-            .keylineTint(.cyan)
+            .keylineTint(.accentColor)
     }
 }
 ```
