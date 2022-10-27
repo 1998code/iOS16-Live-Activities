@@ -58,7 +58,7 @@ struct ContentView: View {
     var actionButtons: some View {
         VStack(spacing:0) {
             Spacer()
-            
+
             HStack(spacing:0) {
                 Button(action: { startDeliveryPizza() }) {
                     HStack {
@@ -75,7 +75,7 @@ struct ContentView: View {
                     }.frame(height: 60)
                 }.tint(.purple)
             }.frame(maxWidth: UIScreen.main.bounds.size.width)
-            
+
             Button(action: { stopDeliveryPizza() }) {
                 HStack {
                     Spacer()
@@ -95,7 +95,7 @@ struct ContentView: View {
         let pizzaDeliveryAttributes = PizzaDeliveryAttributes(numberOfPizzas: 1, totalAmount:"$99")
 
         let initialContentState = PizzaDeliveryAttributes.PizzaDeliveryStatus(driverName: "TIM 👨🏻‍🍳", estimatedDeliveryTime: Date()...Date().addingTimeInterval(15 * 60))
-                                                  
+
         do {
             let deliveryActivity = try Activity<PizzaDeliveryAttributes>.request(
                 attributes: pizzaDeliveryAttributes,
@@ -109,7 +109,7 @@ struct ContentView: View {
     func updateDeliveryPizza() {
         Task {
             let updatedDeliveryStatus = PizzaDeliveryAttributes.PizzaDeliveryStatus(driverName: "TIM 👨🏻‍🍳", estimatedDeliveryTime: Date()...Date().addingTimeInterval(60 * 60))
-            
+
             for activity in Activity<PizzaDeliveryAttributes>.activities{
                 await activity.update(using: updatedDeliveryStatus)
             }
@@ -129,7 +129,7 @@ struct ContentView: View {
             }
         }
     }
-    
+
     @MainActor
     func startPizzaAd() {
         // Fetch image from Internet and convert it to jpegData
