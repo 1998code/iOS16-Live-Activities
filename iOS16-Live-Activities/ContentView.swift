@@ -92,29 +92,23 @@ struct ContentView: View {
 
     // MARK: - Functions
     func startDeliveryPizza() {
-        UIApplication.shared.registerForRemoteNotifications()
-        let pizzaDeliveryAttributes = PizzaDeliveryAttributes(orderTime: Date().timeIntervalSince1970, numberOfPizzas: 1, totalAmount:"$99")
+        let pizzaDeliveryAttributes = PizzaDeliveryAttributes(numberOfPizzas: 1, totalAmount:"$99")
 
-        let initialContentState = PizzaDeliveryAttributes.PizzaDeliveryStatus(driverName: "TIM 👨🏻‍🍳", estimatedDeliveryTime: Date().timeIntervalSince1970+1000*60*60)
+        let initialContentState = PizzaDeliveryAttributes.PizzaDeliveryStatus(driverName: "TIM 👨🏻‍🍳", estimatedDeliveryTime: Date()...Date().addingTimeInterval(15 * 60))
                                                   
         do {
             let deliveryActivity = try Activity<PizzaDeliveryAttributes>.request(
                 attributes: pizzaDeliveryAttributes,
                 contentState: initialContentState,
-                pushType: .token)
+                pushType: nil)
             print("Requested a pizza delivery Live Activity \(deliveryActivity.id)")
-            while deliveryActivity.pushToken == nil {
-                // This is strongly discouraged in a production app
-                // Instead watch for pushToken updates in some DispatchQueue or using Activity.PushTokenUpdates
-            }
-            print("Pizza delivery Live Activity APN token: \(deliveryActivity.pushToken!.hexString)")
         } catch (let error) {
             print("Error requesting pizza delivery Live Activity \(error.localizedDescription)")
         }
     }
     func updateDeliveryPizza() {
         Task {
-            let updatedDeliveryStatus = PizzaDeliveryAttributes.PizzaDeliveryStatus(driverName: "TIM 👨🏻‍🍳", estimatedDeliveryTime: Date().timeIntervalSince1970+1000*60*60)
+            let updatedDeliveryStatus = PizzaDeliveryAttributes.PizzaDeliveryStatus(driverName: "TIM 👨🏻‍🍳", estimatedDeliveryTime: Date()...Date().addingTimeInterval(60 * 60))
             
             for activity in Activity<PizzaDeliveryAttributes>.activities{
                 await activity.update(using: updatedDeliveryStatus)
@@ -138,7 +132,6 @@ struct ContentView: View {
     
     @MainActor
     func startPizzaAd() {
-        UIApplication.shared.registerForRemoteNotifications()
         // Fetch image from Internet and convert it to jpegData
         let url = URL(string: "https://img.freepik.com/premium-vector/pizza-logo-design_9845-319.jpg?w=2000")!
         let data = try! Data(contentsOf: url)
@@ -152,13 +145,8 @@ struct ContentView: View {
             let deliveryActivity = try Activity<PizzaAdAttributes>.request(
                 attributes: pizzaAdAttributes,
                 contentState: initialContentState,
-                pushType: .token)
+                pushType: nil)
             print("Requested a pizza ad Live Activity \(deliveryActivity.id)")
-            while deliveryActivity.pushToken == nil {
-                // This is strongly discouraged in a production app
-                // Instead watch for pushToken updates in some DispatchQueue or using Activity.PushTokenUpdates
-            }
-            print("Pizza ad Live Activity APN token: \(deliveryActivity.pushToken!.hexString)")
         } catch (let error) {
             print("Error requesting pizza ad Live Activity \(error.localizedDescription)")
         }
@@ -168,12 +156,5 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
-    }
-}
-
-extension Data {
-    var hexString: String {
-        let hexString = map { String(format: "%02.2hhx", $0) }.joined()
-        return hexString
     }
 }
