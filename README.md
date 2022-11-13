@@ -226,6 +226,9 @@ Console: Pizza delivery details: DA288E1B-F6F5-4BF1-AA73-E43E0CC13150 -> PizzaDe
 
 Both cases 1 & 2 are already demoed on the sample project.
 
+## Structure
+![diagram](https://raw.githubusercontent.com/1998code/iOS16-Live-Activities/main/diagram.svg)
+
 ## Resources 🐋
 https://developer.apple.com/documentation/activitykit/displaying-live-data-on-the-lock-screen-with-live-activities
 
