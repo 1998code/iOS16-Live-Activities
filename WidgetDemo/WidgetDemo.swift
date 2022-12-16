@@ -40,7 +40,7 @@ struct PizzaDeliveryActivityWidget: Widget {
                                     .foregroundColor(.white.opacity(0.5))
                                 Image(systemName: "ellipsis")
                                     .foregroundColor(.white.opacity(0.5))
-                                Text(timerInterval: context.state.estimatedDeliveryTime, countsDown: true)
+                                Text(timerInterval: (Date.init(timeIntervalSince1970: context.attributes.orderTime))...(Date.init(timeIntervalSince1970: context.state.estimatedDeliveryTime)), countsDown: true)
                                     .bold()
                                     .font(.caption)
                                     .foregroundColor(.white.opacity(0.8))
@@ -77,7 +77,7 @@ struct PizzaDeliveryActivityWidget: Widget {
                 }
                 DynamicIslandExpandedRegion(.trailing) {
                     Label {
-                        Text(timerInterval: context.state.estimatedDeliveryTime, countsDown: true)
+                        Text(timerInterval: (Date.init(timeIntervalSince1970: context.attributes.orderTime))...(Date.init(timeIntervalSince1970: context.state.estimatedDeliveryTime)), countsDown: true)
                             .multilineTextAlignment(.trailing)
                             .frame(width: 50)
                             .monospacedDigit()
@@ -108,14 +108,14 @@ struct PizzaDeliveryActivityWidget: Widget {
                 }
                 .font(.caption2)
             } compactTrailing: {
-                Text(timerInterval: context.state.estimatedDeliveryTime, countsDown: true)
+                Text(timerInterval: (Date.init(timeIntervalSince1970: context.attributes.orderTime))...(Date.init(timeIntervalSince1970: context.state.estimatedDeliveryTime)), countsDown: true)
                     .multilineTextAlignment(.center)
                     .frame(width: 40)
                     .font(.caption2)
             } minimal: {
                 VStack(alignment: .center) {
                     Image(systemName: "timer")
-                    Text(timerInterval: context.state.estimatedDeliveryTime, countsDown: true)
+                    Text(timerInterval: (Date.init(timeIntervalSince1970: context.attributes.orderTime))...(Date.init(timeIntervalSince1970: context.state.estimatedDeliveryTime)), countsDown: true)
                         .multilineTextAlignment(.center)
                         .monospacedDigit()
                         .font(.caption2)

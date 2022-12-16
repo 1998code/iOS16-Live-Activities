@@ -212,6 +212,23 @@ Updating content state for activity DA288E1B-F6F5-4BF1-AA73-E43E0CC13150
 Console: Pizza delivery details: DA288E1B-F6F5-4BF1-AA73-E43E0CC13150 -> PizzaDeliveryAttributes(numberOfPizzas: 1, totalAmount: "$99")
 ```
 
+## How to push updates to a Live Activity using APNs
+1. Create a new key by going to https://developer.apple.com/account/resources/authkeys/list
+2. Press (+) to create a new key, give it a name and select [Apple Push Notifications service (APNs)]
+3. Press [Register] and download the .p8 file while saving the Auth Key ID somewhere safe
+4. Convert .p8 key to .pem key using ```openssl pkcs8 -nocrypt -in AuthKey_XXXXXXXXXX.p8 -out AuthKey_XXXXXXXXXX.pem```
+
+5. Open updateDelivery.sh in some editor
+6. Change ```TEAM_ID``` to your Apple Developer Team ID
+7. Change ```TOKEN_KEY_FILE_NAME```to the .pem file generated in step 4
+8. Change ```AUTH_KEY_ID``` to the Auth Key ID from step 3
+9. Change ```TOPIC``` to the bundle ID of your app (MAKE SURE to keep ```.push-type.liveactivity``` at the end!)
+
+10. Run ```./updateDelivery.sh '{LIVE_ACTIVITY_TOKEN}' '{DELIVERY_DRIVER}' {UNIX_TIME_DELIVERY}```
+11. Example: ```./updateDelivery.sh 'ABCDEFGH' 'Alexandre' 1666857497```
+
+12. There is no step 12.
+
 ## How to pass image data to the widget
 1. YES. Use Local Assets Folder <br/>
     a. Advantage: Easy to implement <br/>
