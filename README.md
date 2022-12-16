@@ -20,8 +20,8 @@ https://twitter.com/1998design/status/1552686498276814848?s=21&t=waceX8VvaP-VCGc
 https://twitter.com/1998design/status/1570225193095933952?s=21&t=LoYk1Llj0cLpEhG0MBFZLw
 
 ## Environment 🔨
-- iOS 16.1
-- Xcode 14.1
+- iOS 16.1 or above
+- Xcode 14.1 or above
 
 ## Tutorial 🤔
 Dynamic Island: https://1998design.medium.com/how-to-create-dynamic-island-widgets-on-ios-16-1-or-above-dca0a7dd1483 <br/>
