@@ -223,7 +223,7 @@ Q2. Can I use Network Image?<br />
 A2. YES. Load the image from the Internet, and pass the data to the widget via App Group and AppStorage (aka UserDefaults)<br/>
     Advantage: Can update in any time as the url can be changed / modify remotely.<br/>
        No need to store in Assets Folder and reduced app size.<br/>
-    Limitation: Unless the user re-open the app, the image cannot be updated in the background.
+    Limitation: Unless the user re-open the app, the image cannot be updated in the background.<br />
 Q3. How about AsyncImage?<br />
 A3. NO. (Known not working)
 
