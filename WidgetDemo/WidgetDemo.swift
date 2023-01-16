@@ -94,11 +94,18 @@ struct PizzaDeliveryActivityWidget: Widget {
                         .foregroundColor(.secondary)
                 }
                 DynamicIslandExpandedRegion(.bottom) {
-                    // Deep Linking test
-                     Link(destination: URL(string: "pizza://TIM")!) {
-                         Label("Contact driver", systemImage: "phone").padding()
-                     }.background(Color.accentColor)
-                     .clipShape(RoundedRectangle(cornerRadius: 15))
+                    // Deep Linking
+                    HStack {
+                        Link(destination: URL(string: "pizza://TIM")!) {
+                             Label("Contact driver", systemImage: "phone.circle.fill").padding()
+                         }.background(Color.accentColor)
+                         .clipShape(RoundedRectangle(cornerRadius: 15))
+                        Spacer()
+                        Link(destination: URL(string: "pizza://cancelOrder")!) {
+                             Label("Cancel Order", systemImage: "xmark.circle.fill").padding()
+                         }.background(Color.red)
+                         .clipShape(RoundedRectangle(cornerRadius: 15))
+                    }.padding()
                 }
             } compactLeading: {
                 Label {
@@ -201,22 +208,27 @@ struct PizzaAdActivityWidget: Widget {
     }
 }
 
-// If you wish to preview the widget:
-struct DemoWidget: View {
-    var body: some View {
-        VStack {
-            Text("Push Ads Demo").font(.caption).foregroundColor(.secondary)
-            VStack {
-                Text("Get $100 OFF").bold().font(.system(size: 50)).foregroundColor(.secondary)
-                Text("when purchase 🍕 every $1,000 | ONLY TODAY").font(.caption).italic()
-            }
-        }
-    }
-}
-
-struct PizzaAdActivityWidget_Previews: PreviewProvider {
+// Preview available on iOS 16.2 or above
+@available(iOSApplicationExtension 16.2, *)
+struct PizzaDeliveryActivityWidget_Previews: PreviewProvider {
+    static let activityAttributes = PizzaDeliveryAttributes(numberOfPizzas: 2, totalAmount: "1000")
+    static let activityState = PizzaDeliveryAttributes.ContentState(driverName: "Tim", estimatedDeliveryTime: Date()...Date().addingTimeInterval(15 * 60))
+    
     static var previews: some View {
-        DemoWidget()
-            .previewContext(WidgetPreviewContext(family: .systemMedium))
+        activityAttributes
+            .previewContext(activityState, viewKind: .content)
+            .previewDisplayName("Notification")
+        
+        activityAttributes
+            .previewContext(activityState, viewKind: .dynamicIsland(.compact))
+            .previewDisplayName("Compact")
+        
+        activityAttributes
+            .previewContext(activityState, viewKind: .dynamicIsland(.expanded))
+            .previewDisplayName("Expanded")
+        
+        activityAttributes
+            .previewContext(activityState, viewKind: .dynamicIsland(.minimal))
+            .previewDisplayName("Minimal")
     }
 }
