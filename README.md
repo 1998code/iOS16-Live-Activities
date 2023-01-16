@@ -198,6 +198,33 @@ struct PizzaDeliveryActivityWidget: Widget {
 }
 ```
 
+### Xcode Preview (iOS 16.2 or above)
+```swift
+@available(iOSApplicationExtension 16.2, *)
+struct PizzaDeliveryActivityWidget_Previews: PreviewProvider {
+    static let activityAttributes = PizzaDeliveryAttributes(numberOfPizzas: 2, totalAmount: "1000")
+    static let activityState = PizzaDeliveryAttributes.ContentState(driverName: "Tim", estimatedDeliveryTime: Date()...Date().addingTimeInterval(15 * 60))
+
+    static var previews: some View {
+        activityAttributes
+            .previewContext(activityState, viewKind: .content)
+            .previewDisplayName("Notification")
+
+        activityAttributes
+            .previewContext(activityState, viewKind: .dynamicIsland(.compact))
+            .previewDisplayName("Compact")
+
+        activityAttributes
+            .previewContext(activityState, viewKind: .dynamicIsland(.expanded))
+            .previewDisplayName("Expanded")
+
+        activityAttributes
+            .previewContext(activityState, viewKind: .dynamicIsland(.minimal))
+            .previewDisplayName("Minimal")
+    }
+}
+```
+
 ## Responses
 ### Start Activity
 ```swift
