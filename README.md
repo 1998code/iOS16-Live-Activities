@@ -20,8 +20,8 @@ https://twitter.com/1998design/status/1552686498276814848?s=21&t=waceX8VvaP-VCGc
 https://twitter.com/1998design/status/1570225193095933952?s=21&t=LoYk1Llj0cLpEhG0MBFZLw
 
 ## Environment 🔨
-- iOS 16.1
-- Xcode 14.1
+- iOS 16.1 or above
+- Xcode 14.1 or above
 
 ## Tutorial 🤔
 Dynamic Island: https://1998design.medium.com/how-to-create-dynamic-island-widgets-on-ios-16-1-or-above-dca0a7dd1483 <br/>
@@ -212,19 +212,25 @@ Updating content state for activity DA288E1B-F6F5-4BF1-AA73-E43E0CC13150
 Console: Pizza delivery details: DA288E1B-F6F5-4BF1-AA73-E43E0CC13150 -> PizzaDeliveryAttributes(numberOfPizzas: 1, totalAmount: "$99")
 ```
 
-## How to pass image data to the widget
-1. YES. Use Local Assets Folder <br/>
-    a. Advantage: Easy to implement <br/>
-       May possible to change image (string name) when updating the event<br/>
-    b. Bad: Limited options and big app size.<br/>
+## How to pass image data to the widget?
+Q1. Can I use Local Assets Folder?<br />
+A1. YES.<br />
+    ✅ Easy to implement <br/>
+    ✅ May possible to change image (string name) when updating the event<br/>
+    ❎ Limited options and big app size.<br/>
             If you need to add more image sets, then re-upload to App Store is required (Time wasting, and not all users can get the instant update)<br/>
-2. YES. Load the image from the Internet, and pass the data to the widget via App Group and AppStorage (aka UserDefaults)<br/>
-    a. Advantage: Can update in any time as the url can be changed / modify remotely.<br/>
-       No need to store in Assets Folder and reduced app size.<br/>
-    b. Limitation: Unless the user re-open the app, the image cannot be updated in the background.
-3. NO. Async Image (Known not working)
+Q2. Can I use Network Image?<br />
+A2. YES. Load the image from the Internet, and pass the data to the widget via App Group and AppStorage (aka UserDefaults)<br/>
+    ✅ Update in any time as the url can be changed / modify remotely.<br/>
+    ✅ No need to store in Assets Folder and reduced app size.<br/>
+    ❎ Unless the user re-open the app, the image cannot be updated in the background.<br />
+Q3. How about AsyncImage?<br />
+A3. NO. (Known not working)
 
 Both cases 1 & 2 are already demoed on the sample project.
+
+## Structure
+![diagram](https://raw.githubusercontent.com/1998code/iOS16-Live-Activities/main/diagram.svg)
 
 ## Resources 🐋
 https://developer.apple.com/documentation/activitykit/displaying-live-data-on-the-lock-screen-with-live-activities
