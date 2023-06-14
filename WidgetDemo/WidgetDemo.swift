@@ -145,11 +145,12 @@ struct PizzaAdActivityWidget: Widget {
                         .frame(width: 64, height: 64)
                         .cornerRadius(15)
                 }
+                Spacer()
                 VStack(alignment: .leading) {
                     Text(context.state.adName).font(.caption).foregroundColor(.secondary)
                     Text("Get \(Text(context.attributes.discount).fontWeight(.black).foregroundColor(.blue)) OFF").bold().font(.system(size: 25)).foregroundColor(.secondary)
-                    Text("when purchase 🍕 every $1,000 TODAY").font(.callout).italic()
-                }
+                    Text("when purchase 🍕 every $500").font(.callout).italic().lineLimit(1)
+                }.padding(.trailing)
             }.padding()
         } dynamicIsland: { context in
             DynamicIsland {

@@ -9,8 +9,12 @@ import SwiftUI
 import ActivityKit
 
 struct ContentView: View {
+    
     @State var showDeepLinkAction: Bool = false
-    @State var driver = ""
+    @State var driver: String = ""
+    @State var showAlert: Bool = false
+    @State var alertMsg: String = ""
+    
     // MARK: - Layout
     var body: some View {
         NavigationView {
@@ -18,16 +22,20 @@ struct ContentView: View {
                 bgImage
                 actionButtons
             }
-            .onTapGesture {
-                showAllDeliveries()
-            }
             .navigationTitle("SwiftPizza 🍕")
             .toolbar {
                 ToolbarItemGroup(placement: .navigationBarLeading) {
-                    Text("For Apple Developers").bold()
-                        .onTapGesture {
-                            startPizzaAd()
-                        }
+                    Text("For  Developers")
+                        .bold()
+                }
+                ToolbarItemGroup(placement: .navigationBarTrailing) {
+                    Button(action: { startPizzaAd() }) {
+                        Text("Get Promo")
+                            .bold()
+                            .font(.caption)
+                    }.buttonStyle(.borderedProminent)
+                    .buttonBorderShape(.capsule)
+                    .tint(.red)
                 }
             }
             .preferredColorScheme(.dark)
@@ -45,6 +53,9 @@ struct ContentView: View {
             } message: {
                 Text("Are you sure to call \(driver)?")
             }
+            .alert(isPresented: $showAlert, content: {
+                Alert(title: Text("Pizza Order Event"), message: Text(alertMsg), dismissButton: .default(Text("OK")))
+            })
         }
     }
     var bgImage: some View {
@@ -59,20 +70,28 @@ struct ContentView: View {
         VStack(spacing:0) {
             Spacer()
             
+            Button(action: { showAllDeliveries() }) {
+                HStack {
+                    Spacer()
+                    Text("Show All Orders 🍕").font(.headline)
+                    Spacer()
+                }.frame(height: 50)
+            }.tint(.brown)
+            
             HStack(spacing:0) {
                 Button(action: { startDeliveryPizza() }) {
                     HStack {
                         Spacer()
                         Text("Start Ordering 👨🏻‍🍳").font(.headline)
                         Spacer()
-                    }.frame(height: 60)
+                    }.frame(height: 50)
                 }.tint(.blue)
                 Button(action: { updateDeliveryPizza() }) {
                     HStack {
                         Spacer()
                         Text("Update Order 🫠").font(.headline)
                         Spacer()
-                    }.frame(height: 60)
+                    }.frame(height: 50)
                 }.tint(.purple)
             }.frame(maxWidth: UIScreen.main.bounds.size.width)
             
@@ -81,7 +100,7 @@ struct ContentView: View {
                     Spacer()
                     Text("Cancel Order 😞").font(.headline)
                     Spacer()
-                }.frame(height: 60)
+                }.frame(height: 50)
                 .padding(.bottom)
             }.tint(.pink)
         }
@@ -101,7 +120,12 @@ struct ContentView: View {
                 attributes: pizzaDeliveryAttributes,
                 contentState: initialContentState,
                 pushType: nil)
+            
             print("Requested a pizza delivery Live Activity \(deliveryActivity.id)")
+            
+            showAlert = true
+            alertMsg = "Requested a pizza delivery Live Activity \(deliveryActivity.id)"
+            
         } catch (let error) {
             print("Error requesting pizza delivery Live Activity \(error.localizedDescription)")
         }
@@ -113,6 +137,11 @@ struct ContentView: View {
             for activity in Activity<PizzaDeliveryAttributes>.activities{
                 await activity.update(using: updatedDeliveryStatus)
             }
+
+            print("Updated pizza delivery Live Activity")
+            
+            showAlert = true
+            alertMsg = "Updated pizza delivery Live Activity"
         }
     }
     func stopDeliveryPizza() {
@@ -120,36 +149,60 @@ struct ContentView: View {
             for activity in Activity<PizzaDeliveryAttributes>.activities{
                 await activity.end(dismissalPolicy: .immediate)
             }
+
+            print("Cancelled pizza delivery Live Activity")
+
+            showAlert = true
+            alertMsg = "Cancelled pizza delivery Live Activity"
         }
     }
     func showAllDeliveries() {
         Task {
+            var orders = ""
             for activity in Activity<PizzaDeliveryAttributes>.activities {
                 print("Pizza delivery details: \(activity.id) -> \(activity.attributes)")
+                orders.append("\n\(activity.id) -> \(activity.attributes)\n")
             }
+
+            showAlert = true
+            alertMsg = orders
         }
     }
     
     @MainActor
     func startPizzaAd() {
-        // Fetch image from Internet and convert it to jpegData
-        let url = URL(string: "https://img.freepik.com/premium-vector/pizza-logo-design_9845-319.jpg?w=2000")!
-        let data = try! Data(contentsOf: url)
-        let image = UIImage(data: data)!
-        let jpegData = image.jpegData(compressionQuality: 1.0)!
-        UserDefaults(suiteName: "group.io.startway.iOS16-Live-Activities")?.set(jpegData, forKey: "pizzaLogo")
-
-        let pizzaAdAttributes = PizzaAdAttributes(discount: "$100")
-        let initialContentState = PizzaAdAttributes.PizzaAdStatus(adName: "TIM 👨🏻‍🍳 's Pizza Offer", showTime: Date().addingTimeInterval(60 * 60))
-        do {
-            let deliveryActivity = try Activity<PizzaAdAttributes>.request(
-                attributes: pizzaAdAttributes,
-                contentState: initialContentState,
-                pushType: nil)
-            print("Requested a pizza ad Live Activity \(deliveryActivity.id)")
-        } catch (let error) {
-            print("Error requesting pizza ad Live Activity \(error.localizedDescription)")
+        guard let url = URL(string: "https://public.blob.vercel-storage.com/MtEBZ7HZoYddbIbI/pizza-logo-design_9845-319%20copy-MOQkaZcYx5TshHVlRvIZsvl1tyXBuT.jpg") else {
+            print("Invalid image URL")
+            return
         }
+        
+        let task = URLSession.shared.dataTask(with: url) { data, response, error in
+            guard let data = data, error == nil else {
+                print("Error fetching image data: \(error?.localizedDescription ?? "Unknown error")")
+                return
+            }
+            
+            guard let image = UIImage(data: data), let jpegData = image.jpegData(compressionQuality: 1.0) else {
+                print("Error converting image data")
+                return
+            }
+            
+            UserDefaults(suiteName: "group.io.startway.iOS16-Live-Activities")?.set(jpegData, forKey: "pizzaLogo")
+
+            let pizzaAdAttributes = PizzaAdAttributes(discount: "$100")
+            let initialContentState = PizzaAdAttributes.PizzaAdStatus(adName: "TIM 👨🏻‍🍳 's Pizza Offer", showTime: Date().addingTimeInterval(60 * 60))
+            do {
+                let deliveryActivity = try Activity<PizzaAdAttributes>.request(
+                    attributes: pizzaAdAttributes,
+                    contentState: initialContentState,
+                    pushType: nil)
+                print("Requested a pizza ad Live Activity \(deliveryActivity.id)")
+            } catch (let error) {
+                print("Error requesting pizza ad Live Activity \(error.localizedDescription)")
+            }
+        }
+        
+        task.resume()
     }
 }
 
