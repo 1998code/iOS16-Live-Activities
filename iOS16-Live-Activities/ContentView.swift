@@ -22,11 +22,13 @@ struct ContentView: View {
                 bgImage
                 actionButtons
             }
+            .background(.black)
             .navigationTitle("SwiftPizza 🍕")
             .toolbar {
                 ToolbarItemGroup(placement: .navigationBarLeading) {
                     Text("For  Developers")
                         .bold()
+                        .foregroundColor(.white)
                 }
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
                     Button(action: { startPizzaAd() }) {
@@ -38,7 +40,6 @@ struct ContentView: View {
                     .tint(.red)
                 }
             }
-            .preferredColorScheme(.dark)
             .onOpenURL(perform: { url in
                 // MARK: Handle Widgets
                 driver = url.absoluteString.replacingOccurrences(of: "pizza://", with: "")
@@ -64,53 +65,58 @@ struct ContentView: View {
             image.resizable().scaledToFill()
         } placeholder: {
             ProgressView()
-        }.ignoresSafeArea(.all)
+        }.frame(width: UIScreen.main.bounds.size.width)
+        .ignoresSafeArea(.all)
     }
     var actionButtons: some View {
-        VStack(spacing:0) {
+        VStack {
             Spacer()
-            
-            Button(action: { showAllDeliveries() }) {
-                HStack {
-                    Spacer()
-                    Text("Show All Orders 🍕").font(.headline)
-                    Spacer()
-                }.frame(height: 50)
-            }.tint(.brown)
-            
-            HStack(spacing:0) {
-                Button(action: { startDeliveryPizza() }) {
+            VStack(spacing:0) {
+                Button(action: { showAllDeliveries() }) {
                     HStack {
                         Spacer()
-                        Text("Start Ordering 👨🏻‍🍳").font(.headline)
+                        Text("Show All Orders 🍕").font(.headline)
                         Spacer()
-                    }.frame(height: 50)
-                }.tint(.blue)
-                Button(action: { updateDeliveryPizza() }) {
+                    }.frame(height: 45)
+                }.tint(.brown)
+                
+                HStack(spacing:0) {
+                    Button(action: { startDeliveryPizza() }) {
+                        HStack {
+                            Spacer()
+                            Text("Start Ordering 👨🏻‍🍳").font(.headline)
+                            Spacer()
+                        }.frame(height: 45)
+                    }.tint(.blue)
+                    Button(action: { updateDeliveryPizza() }) {
+                        HStack {
+                            Spacer()
+                            Text("Update Order 🫠").font(.headline)
+                            Spacer()
+                        }.frame(height: 45)
+                    }.tint(.purple)
+                }
+                
+                Button(action: { stopDeliveryPizza() }) {
                     HStack {
                         Spacer()
-                        Text("Update Order 🫠").font(.headline)
+                        Text("Cancel Order 😞").font(.headline)
                         Spacer()
-                    }.frame(height: 50)
-                }.tint(.purple)
-            }.frame(maxWidth: UIScreen.main.bounds.size.width)
-            
-            Button(action: { stopDeliveryPizza() }) {
-                HStack {
-                    Spacer()
-                    Text("Cancel Order 😞").font(.headline)
-                    Spacer()
-                }.frame(height: 50)
-                .padding(.bottom)
-            }.tint(.pink)
+                    }.frame(height: 45)
+                }.tint(.pink)
+            }
+            .buttonStyle(.bordered)
+            .buttonBorderShape(.roundedRectangle(radius: 0))
+            .background(.thickMaterial)
+            .cornerRadius(25)
+            .padding(.horizontal,5)
         }
-        .buttonStyle(.borderedProminent)
-        .buttonBorderShape(.roundedRectangle(radius: 0))
-        .ignoresSafeArea(edges: .bottom)
     }
 
     // MARK: - Functions
     func startDeliveryPizza() {
+        print(ActivityAuthorizationInfo().areActivitiesEnabled)
+        
         let pizzaDeliveryAttributes = PizzaDeliveryAttributes(numberOfPizzas: 1, totalAmount:"$99")
 
         let initialContentState = PizzaDeliveryAttributes.PizzaDeliveryStatus(driverName: "TIM 👨🏻‍🍳", estimatedDeliveryTime: Date()...Date().addingTimeInterval(15 * 60))
@@ -119,15 +125,24 @@ struct ContentView: View {
             let deliveryActivity = try Activity<PizzaDeliveryAttributes>.request(
                 attributes: pizzaDeliveryAttributes,
                 contentState: initialContentState,
-                pushType: nil)
+                pushType: .token)   // Enable Push Notification Capability First (from pushType: nil)
             
             print("Requested a pizza delivery Live Activity \(deliveryActivity.id)")
-            
-            showAlert = true
-            alertMsg = "Requested a pizza delivery Live Activity \(deliveryActivity.id)"
-            
+
+            // Send the push token to server
+            Task {
+                for await pushToken in deliveryActivity.pushTokenUpdates {
+                    let pushTokenString = pushToken.reduce("") { $0 + String(format: "%02x", $1) }
+                    print(pushTokenString)
+                    
+                    alertMsg = "Requested a pizza delivery Live Activity \(deliveryActivity.id)\n\nPush Token: \(pushTokenString)"
+                    showAlert = true
+                }
+            }
         } catch (let error) {
             print("Error requesting pizza delivery Live Activity \(error.localizedDescription)")
+            alertMsg = "Error requesting pizza delivery Live Activity \(error.localizedDescription)"
+            showAlert = true
         }
     }
     func updateDeliveryPizza() {
@@ -195,10 +210,14 @@ struct ContentView: View {
                 let deliveryActivity = try Activity<PizzaAdAttributes>.request(
                     attributes: pizzaAdAttributes,
                     contentState: initialContentState,
-                    pushType: nil)
+                    pushType: .token)   // Enable Push Notification Capability First (from pushType: nil)
                 print("Requested a pizza ad Live Activity \(deliveryActivity.id)")
+                alertMsg = "Requested a pizza ad Live Activity \(deliveryActivity.id)"
+                showAlert = true
             } catch (let error) {
                 print("Error requesting pizza ad Live Activity \(error.localizedDescription)")
+                alertMsg = "Error requesting pizza ad Live Activity \(error.localizedDescription)"
+                showAlert = true
             }
         }
         

@@ -97,12 +97,16 @@ struct PizzaDeliveryActivityWidget: Widget {
                     // Deep Linking
                     HStack {
                         Link(destination: URL(string: "pizza://TIM")!) {
-                             Label("Contact driver", systemImage: "phone.circle.fill").padding()
+                             Label("Contact driver", systemImage: "phone.circle.fill")
+                                .font(.caption)
+                                .padding()
                          }.background(Color.accentColor)
                          .clipShape(RoundedRectangle(cornerRadius: 15))
                         Spacer()
                         Link(destination: URL(string: "pizza://cancelOrder")!) {
-                             Label("Cancel Order", systemImage: "xmark.circle.fill").padding()
+                             Label("Cancel Order", systemImage: "xmark.circle.fill")
+                                .font(.caption)
+                                .padding()
                          }.background(Color.red)
                          .clipShape(RoundedRectangle(cornerRadius: 15))
                     }.padding()
