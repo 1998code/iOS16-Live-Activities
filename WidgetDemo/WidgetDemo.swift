@@ -20,7 +20,7 @@ struct Widgets: WidgetBundle {
 struct PizzaDeliveryActivityWidget: Widget {
     var body: some WidgetConfiguration {
         ActivityConfiguration(for: PizzaDeliveryAttributes.self) { context in
-            // For devices that don't support the Dynamic Island.
+            // MARK: - For devices that don't support the Dynamic Island.
             VStack(alignment: .leading) {
                 HStack {
                     VStack(alignment: .leading) {
@@ -69,10 +69,11 @@ struct PizzaDeliveryActivityWidget: Widget {
                     .foregroundColor(.secondary)
                     .padding(.horizontal, 5)
             }.padding(15)
+            // MARK: - For Dynamic Island
         } dynamicIsland: { context in
             DynamicIsland {
                 DynamicIslandExpandedRegion(.leading) {
-                    Label("\(context.attributes.numberOfPizzas) Pizzas", systemImage: "bag")
+                    Label("\(context.attributes.numberOfPizzas) Pizza", systemImage: "bag")
                         .font(.title2)
                 }
                 DynamicIslandExpandedRegion(.trailing) {
@@ -96,7 +97,7 @@ struct PizzaDeliveryActivityWidget: Widget {
                 DynamicIslandExpandedRegion(.bottom) {
                     // Deep Linking
                     HStack {
-                        Link(destination: URL(string: "pizza://TIM")!) {
+                        Link(destination: URL(string: "pizza://contact:TIM")!) {
                              Label("Contact driver", systemImage: "phone.circle.fill")
                                 .font(.caption)
                                 .padding()
@@ -109,11 +110,11 @@ struct PizzaDeliveryActivityWidget: Widget {
                                 .padding()
                          }.background(Color.red)
                          .clipShape(RoundedRectangle(cornerRadius: 15))
-                    }.padding()
+                    }
                 }
             } compactLeading: {
                 Label {
-                    Text("\(context.attributes.numberOfPizzas) Pizzas")
+                    Text("\(context.attributes.numberOfPizzas) Pizza")
                 } icon: {
                     Image(systemName: "bag")
                 }

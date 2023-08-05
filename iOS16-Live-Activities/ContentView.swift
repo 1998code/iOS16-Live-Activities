@@ -10,7 +10,7 @@ import ActivityKit
 
 struct ContentView: View {
     
-    @State var showDeepLinkAction: Bool = false
+    @State var showContactAction: Bool = false
     @State var driver: String = ""
     @State var showAlert: Bool = false
     @State var alertMsg: String = ""
@@ -41,15 +41,19 @@ struct ContentView: View {
                 }
             }
             .onOpenURL(perform: { url in
-                // MARK: Handle Widgets
-                driver = url.absoluteString.replacingOccurrences(of: "pizza://", with: "")
-                showDeepLinkAction = true
+                withAnimation {
+                    if url.absoluteString.contains("contact") {
+                        driver = url.absoluteString.replacingOccurrences(of: "pizza://contact:", with: "")
+                        showContactAction = true
+                    } else if url.absoluteString.contains("cancelOrder") {
+                        stopDeliveryPizza()
+                    }
+                }
             })
-            .confirmationDialog("Call Driver", isPresented: $showDeepLinkAction)
-            {
+            .confirmationDialog("Call Driver", isPresented: $showContactAction) {
                 Link("(800)442–4000", destination: URL(string: "tel:8004424000")!)
                 Button("Cancel", role: .cancel) {
-                    showDeepLinkAction = false
+                    showContactAction = false
                 }
             } message: {
                 Text("Are you sure to call \(driver)?")
