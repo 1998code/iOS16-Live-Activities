@@ -43,7 +43,7 @@ struct ContentView: View {
             .onOpenURL(perform: { url in
                 withAnimation {
                     if url.absoluteString.contains("contact") {
-                        driver = url.absoluteString.replacingOccurrences(of: "pizza://contact:", with: "")
+                        driver = url.absoluteString.replacingOccurrences(of: "pizza://contact+", with: "")
                         showContactAction = true
                     } else if url.absoluteString.contains("cancelOrder") {
                         stopDeliveryPizza()

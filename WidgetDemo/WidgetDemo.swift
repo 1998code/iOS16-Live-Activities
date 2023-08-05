@@ -74,7 +74,7 @@ struct PizzaDeliveryActivityWidget: Widget {
             DynamicIsland {
                 DynamicIslandExpandedRegion(.leading) {
                     Label("\(context.attributes.numberOfPizzas) Pizza", systemImage: "bag")
-                        .font(.title2)
+                        .font(.title3)
                 }
                 DynamicIslandExpandedRegion(.trailing) {
                     Label {
@@ -97,7 +97,7 @@ struct PizzaDeliveryActivityWidget: Widget {
                 DynamicIslandExpandedRegion(.bottom) {
                     // Deep Linking
                     HStack {
-                        Link(destination: URL(string: "pizza://contact:TIM")!) {
+                        Link(destination: URL(string: "pizza://contact+TIM")!) {
                              Label("Contact driver", systemImage: "phone.circle.fill")
                                 .font(.caption)
                                 .padding()
