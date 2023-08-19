@@ -10,6 +10,7 @@ import ActivityKit
 
 struct ContentView: View {
     
+    @State var startingEvent: Bool = false
     @State var showContactAction: Bool = false
     @State var driver: String = ""
     @State var showAlert: Bool = false
@@ -88,7 +89,7 @@ struct ContentView: View {
                     Button(action: { startDeliveryPizza() }) {
                         HStack {
                             Spacer()
-                            Text("Start Ordering 👨🏻‍🍳").font(.headline)
+                            Text(startingEvent ? "Loading... 🍕" : "Start Ordering 👨🏻‍🍳").font(.headline)
                             Spacer()
                         }.frame(height: 45)
                     }.tint(.blue)
@@ -119,6 +120,8 @@ struct ContentView: View {
 
     // MARK: - Functions
     func startDeliveryPizza() {
+        startingEvent = true
+        
         print(ActivityAuthorizationInfo().areActivitiesEnabled)
         
         let pizzaDeliveryAttributes = PizzaDeliveryAttributes(numberOfPizzas: 1, totalAmount:"$99")
@@ -141,12 +144,14 @@ struct ContentView: View {
                     
                     alertMsg = "Requested a pizza delivery Live Activity \(deliveryActivity.id)\n\nPush Token: \(pushTokenString)"
                     showAlert = true
+                    startingEvent = false
                 }
             }
         } catch (let error) {
             print("Error requesting pizza delivery Live Activity \(error.localizedDescription)")
             alertMsg = "Error requesting pizza delivery Live Activity \(error.localizedDescription)"
             showAlert = true
+            startingEvent = false
         }
     }
     func updateDeliveryPizza() {
@@ -169,7 +174,7 @@ struct ContentView: View {
                 await activity.end(dismissalPolicy: .immediate)
             }
 
-            print("Cancelled pizza delivery Live Activity")
+            print("Cancelled all pizza delivery Live Activity")
 
             showAlert = true
             alertMsg = "Cancelled pizza delivery Live Activity"
