@@ -266,6 +266,6 @@ https://developer.apple.com/documentation/activitykit/displaying-live-data-on-th
 Swift® and SwiftUI® are trademarks of Apple Inc.
 
 ## Supported By
-<a href="https://www.digitalocean.com/">
+<a href="https://m.do.co/c/ce873177d9ab">
     <img src="https://opensource.nyc3.cdn.digitaloceanspaces.com/attribution/assets/SVG/DO_Logo_horizontal_blue.svg" width="201px">
 </a>
