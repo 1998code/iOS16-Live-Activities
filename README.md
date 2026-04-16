@@ -1,6 +1,6 @@
 <img width="64px" src="https://user-images.githubusercontent.com/54872601/181689472-8f443ca9-4fa0-418b-b0d3-e0730883889a.png" />
 
-# iOS16 Live Activities + Dynamic Island 🏝️
+# Apple Live Activities + Dynamic Island 🏝️ (Since iOS26)
 ### SwiftPizza 🍕👨🏻‍🍳 App for Apple ActivityKit &amp; WidgetKit
 
 This is the first project example referring to the latest <a href="https://developer.apple.com/news/?id=hi37aek8">Apple ActivityKit beta</a> and 
