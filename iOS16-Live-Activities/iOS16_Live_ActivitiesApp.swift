@@ -19,6 +19,12 @@ struct iOS16_Live_ActivitiesApp: App {
         coloredAppearance.shadowColor = .clear
         UINavigationBar.appearance().standardAppearance = coloredAppearance
         UINavigationBar.appearance().scrollEdgeAppearance = coloredAppearance
+
+        // Eagerly request permissions used by the `.keepAlive` / `.localNotif`
+        // A/B test methods. Doing it here (not at first button tap) means the
+        // system prompts appear before the user is mid-test, which keeps the
+        // timing observations clean.
+        LocationKeepAlive.shared.requestAuthorizationIfNeeded()
     }
     var body: some Scene {
         WindowGroup {

@@ -14,6 +14,10 @@ struct PizzaDeliveryAttributes: ActivityAttributes {
     public struct ContentState: Codable, Hashable {
         var driverName: String
         var estimatedDeliveryTime: ClosedRange<Date>
+        /// Which end-state trigger method this activity is exercising.
+        /// Values: "stale", "timeline", "both". Used by the widget to decide
+        /// whether to wrap its body in `TimelineView(.explicit([endDate]))`.
+        var method: String = "stale"
     }
 
     var numberOfPizzas: Int

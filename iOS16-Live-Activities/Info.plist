@@ -23,6 +23,12 @@
 	<array>
 		<string>fetch</string>
 		<string>remote-notification</string>
+		<string>location</string>
+		<string>audio</string>
 	</array>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Track your driver so we can update the delivery status.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Track your driver in the background so the Live Activity stays fresh.</string>
 </dict>
 </plist>

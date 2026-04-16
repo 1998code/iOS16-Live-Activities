@@ -225,6 +225,60 @@ struct PizzaDeliveryActivityWidget_Previews: PreviewProvider {
 }
 ```
 
+## Offline End-State & Midpoint Flips 🔋
+
+Live Activity widgets on the Lock Screen are **snapshot-rendered** with a strict render budget. Two side effects matter here:
+
+1. `TimelineView(.explicit([...]))` / `.periodic(...)` inside the content closure is **unreliable** — iOS throttles / drops scheduled snapshots once the phone is locked or the app is backgrounded. `Text(timerInterval:)` and `ProgressView(timerInterval:)` with `.linear` are the **only** primitives iOS interpolates frame-to-frame; everything else is a static snapshot until the next `activity.update()` / push.
+2. `staleDate` alone cannot flip the widget to its "done" layout at an exact time offline. Without a real push, the snapshot taken around `staleDate` can lag by multiple seconds.
+
+To flip a Live Activity to its end state **offline, at the exact time, with no APNs push**, this project ships two app-side keep-alive strategies that keep the app runnable in the background long enough to fire `activity.update(finalContent)` precisely at `endDate`:
+
+| Strategy            | Mechanism                                                             | Natural fit                       |
+| ------------------- | --------------------------------------------------------------------- | --------------------------------- |
+| `LocationKeepAlive` | `CLLocationManager.startMonitoringSignificantLocationChanges()`       | Delivery / navigation apps        |
+| `AudioKeepAlive`    | Silent PCM WAV looped on `AVAudioSession(.playback, .mixWithOthers)`  | Timer / meditation / workout apps |
+
+Both run a `DispatchSourceTimer` to `endDate`, then call `activity.update(finalContent)`. The UI toggle (`Location [ ⇆ ] Sound`) in `ContentView` picks which side-channel starts for each delivery.
+
+**Required capabilities** (both added to `Info.plist`):
+```xml
+<key>UIBackgroundModes</key>
+<array>
+    <string>location</string>
+    <string>audio</string>
+</array>
+<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+<string>Track your driver in the background so the Live Activity stays fresh.</string>
+```
+
+### Midpoint re-render push
+
+Because `TimelineView` is unreliable on the lock screen, any **discrete in-progress state change** (e.g. warehouse icon → ✓ when the fill sweeps past the midpoint marker) also needs a keep-alive-driven push. The same `DispatchSourceTimer` pattern fires a second time at `startDate + duration/2`, re-pushing the current state just to force a snapshot — the widget body then re-evaluates `Date() >= midpoint` and flips the icon:
+
+```swift
+LocationKeepAlive.shared.start(
+    until: endDate,
+    midpoint: Date().addingTimeInterval(duration / 2),
+    midpointFire: pushSnapshot,   // flips warehouse → ✓
+    fire: pushSnapshot            // flips bar → delivered layout
+)
+```
+
+## Progress Bar Design 🚚
+
+The lock-screen notification bar renders a 3-stop delivery journey:
+
+```
+[📦 package]──[⏱ timer  🏢 warehouse]──[🏠 home]
+```
+
+- **Track**: full-width `Capsule()` in gray.
+- **Fill**: `ProgressView(timerInterval:)` with `.linear` style and a `LinearGradient(colors: [.blue, .green])` tint — the **only** way to get a frame-by-frame smooth fill inside a Live Activity. `scaleEffect(x: 1, y: 7)` fattens the ~4pt system bar to 28pt; `clipShape(Capsule())` keeps the leading edge vertical.
+- **Icons**: package (left), warehouse (center, dead-centered via a `HStack(spacing: 0)` split into two `maxWidth: .infinity` halves with the warehouse icon as the seam), home (right). Timer text sits on the left of the warehouse inside the left half.
+- **Midpoint flip**: warehouse 🏢 → ✓ via the midpoint keep-alive push.
+- **End state**: the same bar, fully filled `LinearGradient`, with a single ✓ parked at the right — reached via the final keep-alive push at `endDate`. Bottom paid-footer text stays so the widget doesn't change height between in-progress / delivered.
+
 ## Responses
 ### Start Activity
 ```swift

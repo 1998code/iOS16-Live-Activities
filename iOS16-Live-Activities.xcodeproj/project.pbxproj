@@ -18,6 +18,7 @@
 		3A34C5132892C433003EB69F /* WidgetDemoExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 3A34C5052892C432003EB69F /* WidgetDemoExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		3AC6C11E2893968A001B44DC /* ActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC6C11D2893968A001B44DC /* ActivityAttributes.swift */; };
 		3AC6C11F2893968F001B44DC /* ActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC6C11D2893968A001B44DC /* ActivityAttributes.swift */; };
+		AABB1100DDEE22FF33001111 /* DeliveryKeepAlive.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB1101DDEE22FF33002222 /* DeliveryKeepAlive.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,6 +61,7 @@
 		3A8D01A528D6C067001A1AFD /* iOS16-Live-Activities.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "iOS16-Live-Activities.entitlements"; sourceTree = "<group>"; };
 		3A8D01A628D6C0A8001A1AFD /* WidgetDemoExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WidgetDemoExtension.entitlements; sourceTree = "<group>"; };
 		3AC6C11D2893968A001B44DC /* ActivityAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityAttributes.swift; sourceTree = "<group>"; };
+		AABB1101DDEE22FF33002222 /* DeliveryKeepAlive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryKeepAlive.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,6 +112,7 @@
 				3A34C4F32892C3A0003EB69F /* iOS16_Live_ActivitiesApp.swift */,
 				3A34C4F52892C3A0003EB69F /* ContentView.swift */,
 				3AC6C11D2893968A001B44DC /* ActivityAttributes.swift */,
+				AABB1101DDEE22FF33002222 /* DeliveryKeepAlive.swift */,
 				3A34C4F72892C3A2003EB69F /* Assets.xcassets */,
 				3A34C4F92892C3A2003EB69F /* Preview Content */,
 			);
@@ -247,6 +250,7 @@
 				3AC6C11E2893968A001B44DC /* ActivityAttributes.swift in Sources */,
 				3A34C4F62892C3A0003EB69F /* ContentView.swift in Sources */,
 				3A34C4F42892C3A0003EB69F /* iOS16_Live_ActivitiesApp.swift in Sources */,
+				AABB1100DDEE22FF33001111 /* DeliveryKeepAlive.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -320,7 +324,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -374,7 +378,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -394,7 +398,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"iOS16-Live-Activities/Preview Content\"";
-				DEVELOPMENT_TEAM = 9PAHLTG8AD;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "iOS16-Live-Activities/Info.plist";
@@ -404,7 +408,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -428,7 +432,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"iOS16-Live-Activities/Preview Content\"";
-				DEVELOPMENT_TEAM = 9PAHLTG8AD;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "iOS16-Live-Activities/Info.plist";
@@ -438,7 +442,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -465,7 +469,7 @@
 				INFOPLIST_FILE = WidgetDemo/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = WidgetDemo;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -494,7 +498,7 @@
 				INFOPLIST_FILE = WidgetDemo/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = WidgetDemo;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

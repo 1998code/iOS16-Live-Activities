@@ -15,22 +15,22 @@ struct ContentView: View {
     @State var driver: String = ""
     @State var showAlert: Bool = false
     @State var alertMsg: String = ""
+    @State var hasActiveDelivery: Bool = false
+    /// Which offline keep-alive strategy to use when starting a delivery.
+    /// Wired to the segmented toggle below the main button.
+    @State var selectedMethod: EndStateMethod = .keepAlive
     
     // MARK: - Layout
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ZStack {
                 bgImage
                 actionButtons
             }
             .background(.black)
             .navigationTitle("SwiftPizza 🍕")
+            .inlineLargeTitleIfAvailable()
             .toolbar {
-                ToolbarItemGroup(placement: .navigationBarLeading) {
-                    Text("For  Developers")
-                        .bold()
-                        .foregroundColor(.white)
-                }
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
                     Button(action: { startPizzaAd() }) {
                         Text("Get Promo")
@@ -62,6 +62,38 @@ struct ContentView: View {
             .alert(isPresented: $showAlert, content: {
                 Alert(title: Text("Pizza Order Event"), message: Text(alertMsg), dismissButton: .default(Text("OK")))
             })
+            .task {
+                await observeDeliveryActivities()
+            }
+        }
+    }
+
+    /// Keeps `hasActiveDelivery` in sync with the real ActivityKit state so the
+    /// Update/Cancel buttons only appear when there's an active delivery.
+    @MainActor
+    func observeDeliveryActivities() async {
+        func refresh() {
+            hasActiveDelivery = !Activity<PizzaDeliveryAttributes>.activities.isEmpty
+        }
+
+        // Initial value + listen for state changes on any already-running activity.
+        refresh()
+        for activity in Activity<PizzaDeliveryAttributes>.activities {
+            Task { [activity] in
+                for await _ in activity.activityStateUpdates {
+                    await MainActor.run { refresh() }
+                }
+            }
+        }
+
+        // Listen for newly-started activities; attach a state observer to each.
+        for await activity in Activity<PizzaDeliveryAttributes>.activityUpdates {
+            refresh()
+            Task { [activity] in
+                for await _ in activity.activityStateUpdates {
+                    await MainActor.run { refresh() }
+                }
+            }
         }
     }
     var bgImage: some View {
@@ -77,14 +109,16 @@ struct ContentView: View {
         VStack {
             Spacer()
             VStack(spacing:0) {
-                Button(action: { showAllDeliveries() }) {
-                    HStack {
-                        Spacer()
-                        Text("Show All Orders 🍕").font(.headline)
-                        Spacer()
-                    }.frame(height: 45)
-                }.tint(.brown)
-                
+                if hasActiveDelivery {
+                    Button(action: { showAllDeliveries() }) {
+                        HStack {
+                            Spacer()
+                            Text("Show All Orders 🍕").font(.headline)
+                            Spacer()
+                        }.frame(height: 45)
+                    }.tint(.brown)
+                }
+
                 HStack(spacing:0) {
                     Button(action: { startDeliveryPizza() }) {
                         HStack {
@@ -93,73 +127,207 @@ struct ContentView: View {
                             Spacer()
                         }.frame(height: 45)
                     }.tint(.blue)
-                    Button(action: { updateDeliveryPizza() }) {
+                    if hasActiveDelivery {
+                        Button(action: { updateDeliveryPizza() }) {
+                            HStack {
+                                Spacer()
+                                Text("Update Order 🫠").font(.headline)
+                                Spacer()
+                            }.frame(height: 45)
+                        }.tint(.purple)
+                    }
+                }
+
+                if hasActiveDelivery {
+                    Button(action: { stopDeliveryPizza() }) {
                         HStack {
                             Spacer()
-                            Text("Update Order 🫠").font(.headline)
+                            Text("Cancel Order 😞").font(.headline)
                             Spacer()
                         }.frame(height: 45)
-                    }.tint(.purple)
+                    }.tint(.pink)
                 }
-                
-                Button(action: { stopDeliveryPizza() }) {
-                    HStack {
-                        Spacer()
-                        Text("Cancel Order 😞").font(.headline)
-                        Spacer()
-                    }.frame(height: 45)
-                }.tint(.pink)
             }
             .buttonStyle(.bordered)
             .buttonBorderShape(.roundedRectangle(radius: 0))
             .background(.thickMaterial)
             .cornerRadius(25)
             .padding(.horizontal,5)
+
+            // Pick which offline keep-alive strategy the main button uses.
+            // Both push `activity.update(finalContent)` at endDate; they only
+            // differ in how the app stays runnable until then.
+            methodToggle
+                .padding(.horizontal, 5)
+                .padding(.top, 6)
         }
     }
 
-    // MARK: - Functions
-    func startDeliveryPizza() {
-        startingEvent = true
-        
-        print(ActivityAuthorizationInfo().areActivitiesEnabled)
-        
-        let pizzaDeliveryAttributes = PizzaDeliveryAttributes(numberOfPizzas: 1, totalAmount:"$99")
-
-        let initialContentState = PizzaDeliveryAttributes.PizzaDeliveryStatus(driverName: "TIM 👨🏻‍🍳", estimatedDeliveryTime: Date()...Date().addingTimeInterval(15 * 60))
-                                                  
-        do {
-            let deliveryActivity = try Activity<PizzaDeliveryAttributes>.request(
-                attributes: pizzaDeliveryAttributes,
-                contentState: initialContentState,
-                pushType: .token)   // Enable Push Notification Capability First (from pushType: nil)
-            
-            print("Requested a pizza delivery Live Activity \(deliveryActivity.id)")
-
-            // Send the push token to server
-            Task {
-                for await pushToken in deliveryActivity.pushTokenUpdates {
-                    let pushTokenString = pushToken.reduce("") { $0 + String(format: "%02x", $1) }
-                    print(pushTokenString)
-                    
-                    alertMsg = "Requested a pizza delivery Live Activity \(deliveryActivity.id)\n\nPush Token: \(pushTokenString)"
-                    showAlert = true
-                    startingEvent = false
-                }
+    /// Location [ toggle ] Sound — the active side bolds, the other fades.
+    var methodToggle: some View {
+        HStack(spacing: 12) {
+            Spacer()
+            HStack(spacing: 4) {
+                Image(systemName: "location.fill")
+                Text("Location")
             }
-        } catch (let error) {
-            print("Error requesting pizza delivery Live Activity \(error.localizedDescription)")
-            alertMsg = "Error requesting pizza delivery Live Activity \(error.localizedDescription)"
-            showAlert = true
-            startingEvent = false
+            .foregroundColor(selectedMethod == .keepAlive ? .orange : .secondary)
+            .fontWeight(selectedMethod == .keepAlive ? .bold : .regular)
+
+            Toggle("", isOn: Binding(
+                get: { selectedMethod == .audio },
+                set: { selectedMethod = $0 ? .audio : .keepAlive }
+            ))
+            .labelsHidden()
+
+            HStack(spacing: 4) {
+                Image(systemName: "speaker.wave.2.fill")
+                Text("Sound")
+            }
+            .foregroundColor(selectedMethod == .audio ? .green : .secondary)
+            .fontWeight(selectedMethod == .audio ? .bold : .regular)
+            Spacer()
+        }
+        .font(.subheadline)
+        .padding(.vertical, 8)
+        .background(.thickMaterial)
+        .cornerRadius(12)
+    }
+
+    // MARK: - Functions
+    /// Offline end-state trigger strategies. Both keep the app runnable past
+    /// iOS's ~7s Live Activity render freeze so we can call
+    /// `activity.update(finalContent)` exactly at `endDate`.
+    enum EndStateMethod: String {
+        /// Significant-location-change subscription keeps the app alive.
+        /// Natural fit for delivery / navigation apps.
+        case keepAlive
+        /// Silent `AVAudioSession .playback` keeps the app alive.
+        /// Natural fit for timer / alarm / meditation apps (what Loop-style
+        /// countdown apps are known to use).
+        case audio
+    }
+
+    /// Half-minute delivery using whichever strategy the toggle has selected.
+    /// 30s is long enough to lock the phone and observe the end-state flip,
+    /// short enough to avoid burning keep-alive budget.
+    func startDeliveryPizza() {
+        startDelivery(duration: 30, method: selectedMethod)
+    }
+
+    /// Parameterised starter used by both the main button and the A/B test buttons.
+    /// - Parameters:
+    ///   - duration: seconds from now until `endDate`
+    ///   - method: which end-state trigger strategy to exercise
+    func startDelivery(duration: TimeInterval, method: EndStateMethod) {
+        startingEvent = true
+
+        print(ActivityAuthorizationInfo().areActivitiesEnabled)
+
+        // Run the whole start flow as one ordered async block so the cleanup
+        // (`.end`) is guaranteed to finish before we `.request` the new one.
+        Task { @MainActor in
+            // 1. Tear down any in-flight activity first — running A/B tests
+            //    on top of each other leaks render budget and skews results.
+            //    Also stop any lingering offline-method side channels.
+            LocationKeepAlive.shared.stop()
+            AudioKeepAlive.shared.stop()
+            for activity in Activity<PizzaDeliveryAttributes>.activities {
+                await activity.end(nil, dismissalPolicy: .immediate)
+            }
+
+            // 2. Build the new activity.
+            let pizzaDeliveryAttributes = PizzaDeliveryAttributes(numberOfPizzas: 1, totalAmount: "$99")
+            let endDate = Date().addingTimeInterval(duration)
+            let initialContentState = PizzaDeliveryAttributes.PizzaDeliveryStatus(
+                driverName: "TIM 👨🏻‍🍳",
+                estimatedDeliveryTime: Date()...endDate,
+                method: method.rawValue
+            )
+
+            // No `staleDate` — the keep-alive side channel will push a real
+            // `activity.update(finalContent)` at endDate, which is the only
+            // thing that punches through the lock-screen render freeze.
+            let initialContent = ActivityContent(state: initialContentState, staleDate: nil)
+
+            // 3. Request it.
+            do {
+                let deliveryActivity = try Activity<PizzaDeliveryAttributes>.request(
+                    attributes: pizzaDeliveryAttributes,
+                    content: initialContent,
+                    pushType: .token)
+
+                print("Requested a pizza delivery Live Activity \(deliveryActivity.id) [\(method.rawValue), \(Int(duration))s]")
+
+                // 4. Flip UI state IMMEDIATELY — the push token may arrive later
+                //    (or never, if APNs isn't reachable) and we don't want the
+                //    "Loading..." label stuck forever if that happens.
+                alertMsg = "Started [\(method.rawValue.uppercased()) · \(Int(duration))s]\n\n\(deliveryActivity.id)"
+                showAlert = true
+                startingEvent = false
+
+                // 5. Arm the end-state trigger side-channel for offline methods.
+                //    Both keep-alive variants share the same payload: run a
+                //    timer to `endDate`, then directly push the final
+                //    ContentState — which is the only way to punch through
+                //    the Live Activity lock-screen render freeze offline.
+                //    We also fire at the midpoint to flip warehouse → ✓
+                //    in the widget (TimelineView alone can't be trusted to
+                //    re-render on the lock screen, so we push ourselves).
+                let pushSnapshot: () -> Void = {
+                    Task {
+                        let state = PizzaDeliveryAttributes.PizzaDeliveryStatus(
+                            driverName: initialContentState.driverName,
+                            estimatedDeliveryTime: initialContentState.estimatedDeliveryTime,
+                            method: initialContentState.method
+                        )
+                        let content = ActivityContent(state: state, staleDate: nil)
+                        await deliveryActivity.update(content)
+                    }
+                }
+                let midpoint = Date().addingTimeInterval(duration / 2)
+                switch method {
+                case .keepAlive:
+                    LocationKeepAlive.shared.requestAuthorizationIfNeeded()
+                    LocationKeepAlive.shared.start(
+                        until: endDate,
+                        midpoint: midpoint,
+                        midpointFire: pushSnapshot,
+                        fire: pushSnapshot
+                    )
+                case .audio:
+                    AudioKeepAlive.shared.start(
+                        until: endDate,
+                        midpoint: midpoint,
+                        midpointFire: pushSnapshot,
+                        fire: pushSnapshot
+                    )
+                }
+
+                // 6. Observe the push token in the background, purely for log
+                //    / server dispatch purposes. No longer blocks the UI.
+                Task {
+                    for await pushToken in deliveryActivity.pushTokenUpdates {
+                        let pushTokenString = pushToken.reduce("") { $0 + String(format: "%02x", $1) }
+                        print("Push token for \(deliveryActivity.id): \(pushTokenString)")
+                    }
+                }
+            } catch (let error) {
+                print("Error requesting pizza delivery Live Activity \(error.localizedDescription)")
+                alertMsg = "Error requesting pizza delivery Live Activity \(error.localizedDescription)"
+                showAlert = true
+                startingEvent = false
+            }
         }
     }
     func updateDeliveryPizza() {
         Task {
-            let updatedDeliveryStatus = PizzaDeliveryAttributes.PizzaDeliveryStatus(driverName: "TIM 👨🏻‍🍳", estimatedDeliveryTime: Date()...Date().addingTimeInterval(60 * 60))
-            
+            let newEndDate = Date().addingTimeInterval(60 * 60)
+            let updatedDeliveryStatus = PizzaDeliveryAttributes.PizzaDeliveryStatus(driverName: "TIM 👨🏻‍🍳", estimatedDeliveryTime: Date()...newEndDate)
+            let updatedContent = ActivityContent(state: updatedDeliveryStatus, staleDate: newEndDate)
+
             for activity in Activity<PizzaDeliveryAttributes>.activities{
-                await activity.update(using: updatedDeliveryStatus)
+                await activity.update(updatedContent)
             }
 
             print("Updated pizza delivery Live Activity")
@@ -170,8 +338,29 @@ struct ContentView: View {
     }
     func stopDeliveryPizza() {
         Task {
-            for activity in Activity<PizzaDeliveryAttributes>.activities{
-                await activity.end(dismissalPolicy: .immediate)
+            // Cancel any offline side-channels we set up for this delivery.
+            LocationKeepAlive.shared.stop()
+            AudioKeepAlive.shared.stop()
+
+            // Per Apple guidance: always pass a final `ContentState` when ending
+            // a Live Activity. Between `end()` and the system actually removing
+            // the activity from the Lock Screen, the widget may still be rendered
+            // — so we want it to show a sensible "cancelled / delivered" layout,
+            // not the stale in-flight state.
+            for activity in Activity<PizzaDeliveryAttributes>.activities {
+                // Collapse `estimatedDeliveryTime` to "now" so `isDelivered(context)`
+                // evaluates true and the widget renders the ✓ end-state.
+                let now = Date()
+                let finalState = PizzaDeliveryAttributes.PizzaDeliveryStatus(
+                    driverName: activity.content.state.driverName,
+                    estimatedDeliveryTime: now...now,
+                    method: activity.content.state.method
+                )
+                let finalContent = ActivityContent(state: finalState, staleDate: nil)
+                // `.after(now + 4)` keeps the final frame on-screen briefly so the
+                // user sees the transition instead of a pop-out. Swap to `.immediate`
+                // for instant removal, or `.default` to let the system decide.
+                await activity.end(finalContent, dismissalPolicy: .after(now.addingTimeInterval(4)))
             }
 
             print("Cancelled all pizza delivery Live Activity")
@@ -237,5 +426,19 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+    }
+}
+
+private extension View {
+    /// Applies `.toolbarTitleDisplayMode(.inlineLarge)` on iOS 17.1+ and
+    /// leaves the view untouched on earlier versions — `inlineLarge` isn't
+    /// available on iOS 16 / 17.0 so we can't just call the modifier.
+    @ViewBuilder
+    func inlineLargeTitleIfAvailable() -> some View {
+        if #available(iOS 17.1, *) {
+            self.toolbarTitleDisplayMode(.inlineLarge)
+        } else {
+            self
+        }
     }
 }
