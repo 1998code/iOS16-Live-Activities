@@ -13,7 +13,7 @@ This is the first project example referring to the latest <a href="https://devel
 ## Preview 📱
 <img width="1080" height="810" alt="Demo" src="https://github.com/user-attachments/assets/d2884598-5270-4c3a-a795-7fdf8f42093b" />
 
-<img width="420px" src="https://user-images.githubusercontent.com/54872601/181690034-bf5b5c58-16c2-45e7-8ef3-57899b0bf208.gif" /> <img width="420px" src="https://user-images.githubusercontent.com/54872601/190294592-0e019d65-0b37-4636-a8af-49a49cc3657b.gif" />
+<img width="350px" src="https://user-images.githubusercontent.com/54872601/181690034-bf5b5c58-16c2-45e7-8ef3-57899b0bf208.gif" /> <img width="350px" src="https://user-images.githubusercontent.com/54872601/190294592-0e019d65-0b37-4636-a8af-49a49cc3657b.gif" />
 
 ## Environment 🔨
 - iOS 16.1 or above
