@@ -51,7 +51,7 @@ struct PizzaDeliveryAttributes: ActivityAttributes {
 func startDeliveryPizza() {
     let pizzaDeliveryAttributes = PizzaDeliveryAttributes(numberOfPizzas: 1, totalAmount:"$99")
     // Date() changed to Date()...Date() - 16.1
-    let initialContentState = PizzaDeliveryAttributes.PizzaDeliveryStatus(driverName: "TIM 👨🏻‍🍳", estimatedDeliveryTime: Date()...Date().addingTimeInterval(15 * 60))
+    let initialContentState = PizzaDeliveryAttributes.PizzaDeliveryStatus(driverName: "Tim", estimatedDeliveryTime: Date()...Date().addingTimeInterval(15 * 60))
 
     do {
         let deliveryActivity = try Activity<PizzaDeliveryAttributes>.request(
@@ -67,7 +67,10 @@ func startDeliveryPizza() {
 func updateDeliveryPizza() {
     Task {
         // Date() changed to Date()...Date() - 16.1
-        let updatedDeliveryStatus = PizzaDeliveryAttributes.PizzaDeliveryStatus(driverName: "TIM 👨🏻‍🍳", estimatedDeliveryTime: Date()...Date().addingTimeInterval(60 * 60))
+        // Demo reassignment: swap Tim → John mid-flight. The widget reads the
+        // avatar via `Image(context.state.driverName)`, so changing the name
+        // automatically swaps the rendered image set.
+        let updatedDeliveryStatus = PizzaDeliveryAttributes.PizzaDeliveryStatus(driverName: "John", estimatedDeliveryTime: Date()...Date().addingTimeInterval(60 * 60))
 
         for activity in Activity<PizzaDeliveryAttributes>.activities{
             await activity.update(using: updatedDeliveryStatus)
@@ -250,7 +253,10 @@ Both run a `DispatchSourceTimer` to `endDate`, then call `activity.update(finalC
 
 ### Midpoint re-render push
 
-Because `TimelineView` is unreliable on the lock screen, any **discrete in-progress state change** (e.g. warehouse icon → ✓ when the fill sweeps past the midpoint marker) also needs a keep-alive-driven push. The same `DispatchSourceTimer` pattern fires a second time at `startDate + duration/2`, re-pushing the current state just to force a snapshot — the widget body then re-evaluates `Date() >= midpoint` and flips the icon:
+Because `TimelineView` is unreliable on the lock screen, any **discrete in-progress state change** (e.g. warehouse icon → ✓ when the fill sweeps past the midpoint marker) also needs a keep-alive-driven push. The same `DispatchSourceTimer` pattern fires a second time at `startDate + duration/2`. Two patterns fit naturally on this midpoint fire:
+
+1. **Force a snapshot only.** Re-push the activity's current state — the widget body re-evaluates `Date() >= midpoint` and flips the icon. Use this when nothing in `ContentState` actually needs to change.
+2. **Mutate state at the midpoint.** Push a *modified* `ContentState` that reflects an in-progress event (e.g. driver reassignment). The demo in this project takes this path: at midpoint it swaps `driverName` from `"Tim"` to `"John"`, which simultaneously flips the warehouse → ✓ icon, swaps the avatar via `Image(context.state.driverName)`, and triggers the conditional "Apple reassigned …" caption — all from a single midpoint push.
 
 ```swift
 LocationKeepAlive.shared.start(
