@@ -110,9 +110,12 @@ struct PizzaDeliveryActivityWidget: Widget {
                         }
                         .frame(height: 32)
                         Spacer()
-                        Text("\(context.attributes.numberOfPizzas) 🍕")
-                            .font(.title)
-                            .bold()
+                        Image(context.state.driverName)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 44, height: 44)
+                            .clipShape(Circle())
+                            .overlay(Circle().stroke(.white, lineWidth: 2))
                     }.padding(5)
                     Text("You've already paid: \(context.attributes.totalAmount) + $9.9 Delivery Fee 💸")
                         .font(.caption)
@@ -121,9 +124,15 @@ struct PizzaDeliveryActivityWidget: Widget {
                 }.padding(15)
             } else {
             VStack(alignment: .leading) {
-                Text("Your \(context.state.driverName) is on the way!")
-                    .font(.headline)
-                    .padding(.horizontal, 5)
+                if context.state.driverName == "Tim" {
+                    Text("Your \(context.state.driverName) is on the way!")
+                        .font(.headline)
+                        .padding(.horizontal, 5)
+                } else {
+                    Text("Apple reassigned \(context.state.driverName) to deliver your order")
+                        .font(.headline)
+                        .padding(.horizontal, 5)
+                }
                 HStack {
                     VStack(alignment: .leading) {
                         // Bar stack:
@@ -208,9 +217,12 @@ struct PizzaDeliveryActivityWidget: Widget {
                     }
                     Spacer()
                     VStack {
-                        Text("\(context.attributes.numberOfPizzas) 🍕")
-                            .font(.title)
-                            .bold()
+                        Image(context.state.driverName)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 44, height: 44)
+                            .clipShape(Circle())
+                            .overlay(Circle().stroke(.white, lineWidth: 2))
                         Spacer()
                     }
                 }.padding(5)

@@ -16,6 +16,8 @@
 		3A34C50D2892C432003EB69F /* WidgetDemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A34C50C2892C432003EB69F /* WidgetDemo.swift */; };
 		3A34C50F2892C433003EB69F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3A34C50E2892C433003EB69F /* Assets.xcassets */; };
 		3A34C5132892C433003EB69F /* WidgetDemoExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 3A34C5052892C432003EB69F /* WidgetDemoExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		3A7722902F9E312E00590CB8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3A77228E2F9E312E00590CB8 /* Assets.xcassets */; };
+		3A7722912F9E312E00590CB8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3A77228E2F9E312E00590CB8 /* Assets.xcassets */; };
 		3AC6C11E2893968A001B44DC /* ActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC6C11D2893968A001B44DC /* ActivityAttributes.swift */; };
 		3AC6C11F2893968F001B44DC /* ActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC6C11D2893968A001B44DC /* ActivityAttributes.swift */; };
 		AABB1100DDEE22FF33001111 /* DeliveryKeepAlive.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB1101DDEE22FF33002222 /* DeliveryKeepAlive.swift */; };
@@ -57,7 +59,8 @@
 		3A34C50C2892C432003EB69F /* WidgetDemo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetDemo.swift; sourceTree = "<group>"; };
 		3A34C50E2892C433003EB69F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3A34C5102892C433003EB69F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		3A36686F2892CB94003F048E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		3A36686F2892CB94003F048E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3A77228E2F9E312E00590CB8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3A8D01A528D6C067001A1AFD /* iOS16-Live-Activities.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "iOS16-Live-Activities.entitlements"; sourceTree = "<group>"; };
 		3A8D01A628D6C0A8001A1AFD /* WidgetDemoExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WidgetDemoExtension.entitlements; sourceTree = "<group>"; };
 		3AC6C11D2893968A001B44DC /* ActivityAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityAttributes.swift; sourceTree = "<group>"; };
@@ -90,6 +93,7 @@
 				3A8D01A628D6C0A8001A1AFD /* WidgetDemoExtension.entitlements */,
 				3A34C4F22892C3A0003EB69F /* iOS16-Live-Activities */,
 				3A34C50B2892C432003EB69F /* WidgetDemo */,
+				3A77228F2F9E312E00590CB8 /* Resources */,
 				3A34C5062892C432003EB69F /* Frameworks */,
 				3A34C4F12892C3A0003EB69F /* Products */,
 			);
@@ -144,6 +148,14 @@
 				3A34C5102892C433003EB69F /* Info.plist */,
 			);
 			path = WidgetDemo;
+			sourceTree = "<group>";
+		};
+		3A77228F2F9E312E00590CB8 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				3A77228E2F9E312E00590CB8 /* Assets.xcassets */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -228,6 +240,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3A34C4FB2892C3A2003EB69F /* Preview Assets.xcassets in Resources */,
+				3A7722902F9E312E00590CB8 /* Assets.xcassets in Resources */,
 				3A34C4F82892C3A2003EB69F /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -236,6 +249,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3A7722912F9E312E00590CB8 /* Assets.xcassets in Resources */,
 				3A34C50F2892C433003EB69F /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -398,7 +412,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"iOS16-Live-Activities/Preview Content\"";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 9PAHLTG8AD;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "iOS16-Live-Activities/Info.plist";
@@ -432,7 +446,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"iOS16-Live-Activities/Preview Content\"";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 9PAHLTG8AD;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "iOS16-Live-Activities/Info.plist";

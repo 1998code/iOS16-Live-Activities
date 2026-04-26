@@ -208,11 +208,10 @@ struct ContentView: View {
         case audio
     }
 
-    /// Half-minute delivery using whichever strategy the toggle has selected.
-    /// 30s is long enough to lock the phone and observe the end-state flip,
-    /// short enough to avoid burning keep-alive budget.
+    /// Short demo delivery using whichever strategy the toggle has selected.
+    /// 15s is enough to observe Start → reassign-at-midpoint → delivered.
     func startDeliveryPizza() {
-        startDelivery(duration: 30, method: selectedMethod)
+        startDelivery(duration: 15, method: selectedMethod)
     }
 
     /// Parameterised starter used by both the main button and the A/B test buttons.
@@ -240,7 +239,7 @@ struct ContentView: View {
             let pizzaDeliveryAttributes = PizzaDeliveryAttributes(numberOfPizzas: 1, totalAmount: "$99")
             let endDate = Date().addingTimeInterval(duration)
             let initialContentState = PizzaDeliveryAttributes.PizzaDeliveryStatus(
-                driverName: "TIM 👨🏻‍🍳",
+                driverName: "Tim",
                 estimatedDeliveryTime: Date()...endDate,
                 method: method.rawValue
             )
@@ -274,17 +273,55 @@ struct ContentView: View {
                 //    We also fire at the midpoint to flip warehouse → ✓
                 //    in the widget (TimelineView alone can't be trusted to
                 //    re-render on the lock screen, so we push ourselves).
+                let activityID = deliveryActivity.id
+
+                // Look up the activity fresh at fire time — capturing
+                // `deliveryActivity` and reading its `.content` can return a
+                // stale snapshot, which would revert the widget to the initial
+                // driverName.
+                func currentActivity() -> Activity<PizzaDeliveryAttributes>? {
+                    Activity<PizzaDeliveryAttributes>
+                        .activities
+                        .first(where: { $0.id == activityID })
+                }
+
+                // EndDate fire: just re-push the current state to force the
+                // lock-screen widget to flip into its delivered layout.
                 let pushSnapshot: () -> Void = {
                     Task {
-                        let state = PizzaDeliveryAttributes.PizzaDeliveryStatus(
-                            driverName: initialContentState.driverName,
-                            estimatedDeliveryTime: initialContentState.estimatedDeliveryTime,
-                            method: initialContentState.method
+                        guard let activity = currentActivity() else { return }
+                        let content = ActivityContent(
+                            state: activity.content.state,
+                            staleDate: nil
                         )
-                        let content = ActivityContent(state: state, staleDate: nil)
-                        await deliveryActivity.update(content)
+                        await activity.update(content)
                     }
                 }
+
+                // Midpoint fire: auto-reassign Tim → John. This is what makes
+                // the "Apple reassigned John ..." caption appear and the avatar
+                // swap. If the user already manually reassigned via the Update
+                // button, we respect their choice and just re-push so the
+                // warehouse → ✓ icon flips.
+                let reassignAtMidpoint: () -> Void = {
+                    Task {
+                        guard let activity = currentActivity() else { return }
+                        let current = activity.content.state
+                        let nextState: PizzaDeliveryAttributes.ContentState
+                        if current.driverName == "Tim" {
+                            nextState = PizzaDeliveryAttributes.ContentState(
+                                driverName: "John",
+                                estimatedDeliveryTime: current.estimatedDeliveryTime,
+                                method: current.method
+                            )
+                        } else {
+                            nextState = current
+                        }
+                        let content = ActivityContent(state: nextState, staleDate: nil)
+                        await activity.update(content)
+                    }
+                }
+
                 let midpoint = Date().addingTimeInterval(duration / 2)
                 switch method {
                 case .keepAlive:
@@ -292,14 +329,14 @@ struct ContentView: View {
                     LocationKeepAlive.shared.start(
                         until: endDate,
                         midpoint: midpoint,
-                        midpointFire: pushSnapshot,
+                        midpointFire: reassignAtMidpoint,
                         fire: pushSnapshot
                     )
                 case .audio:
                     AudioKeepAlive.shared.start(
                         until: endDate,
                         midpoint: midpoint,
-                        midpointFire: pushSnapshot,
+                        midpointFire: reassignAtMidpoint,
                         fire: pushSnapshot
                     )
                 }
@@ -323,7 +360,7 @@ struct ContentView: View {
     func updateDeliveryPizza() {
         Task {
             let newEndDate = Date().addingTimeInterval(60 * 60)
-            let updatedDeliveryStatus = PizzaDeliveryAttributes.PizzaDeliveryStatus(driverName: "TIM 👨🏻‍🍳", estimatedDeliveryTime: Date()...newEndDate)
+            let updatedDeliveryStatus = PizzaDeliveryAttributes.PizzaDeliveryStatus(driverName: "John", estimatedDeliveryTime: Date()...newEndDate)
             let updatedContent = ActivityContent(state: updatedDeliveryStatus, staleDate: newEndDate)
 
             for activity in Activity<PizzaDeliveryAttributes>.activities{

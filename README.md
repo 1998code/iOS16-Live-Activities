@@ -289,24 +289,111 @@ Updating content state for activity DA288E1B-F6F5-4BF1-AA73-E43E0CC13150
 Console: Pizza delivery details: DA288E1B-F6F5-4BF1-AA73-E43E0CC13150 -> PizzaDeliveryAttributes(numberOfPizzas: 1, totalAmount: "$99")
 ```
 
-## How to pass image data to the widget?
-Q1. Can I use Local Assets Folder?<br />
-A1. YES.<br />
-    ✅ Easy to implement <br/>
-    ✅ May possible to change image (string name) when updating the event<br/>
-    ❎ Limited options and big app size.<br/>
-            If you need to add more image sets, then re-upload to App Store is required (Time wasting, and not all users can get the instant update)
-<br/><br/>
-Q2. Can I use Network Image?<br />
-A2. YES. Load the image from the Internet, and pass the data to the widget via App Group and AppStorage (aka UserDefaults)<br/>
-    ✅ Update in any time as the url can be changed / modify remotely.<br/>
-    ✅ No need to store in Assets Folder and reduced app size.<br/>
-    ❎ Unless the user re-open the app, the image cannot be updated in the background.
-<br /><br />
-Q3. How about AsyncImage?<br />
-A3. NO. (Known not working)
+## Sharing Images Across App, Widget & Live Activity 🖼️
 
-Both cases 1 & 2 are already demoed in the sample project.
+The main app, widget extension, and Live Activity are **three separate targets** with three separate bundles. An asset added to one target is **not** automatically visible to the others, and a widget extension cannot make network requests of its own. Pick the strategy that matches where your images come from.
+
+### Demo in this project
+
+The driver avatar shown next to the delivery bar (`John`) is loaded with `Image(context.state.driverName)` in [`WidgetDemo.swift`](WidgetDemo/WidgetDemo.swift). The asset name is driven by the `driverName` value passed in `ContentState`, so changing the driver in the main app automatically swaps the avatar — provided a matching image set exists in the widget's bundle.
+
+This project follows **Case 1 → Option A** below: the avatars (`Tim`, `John`) live in a shared catalog at [`Resources/Assets.xcassets`](Resources/Assets.xcassets) with **target membership ticked on both `iOS16-Live-Activities` and `WidgetDemo`**, so the same image set is reachable from the app, the widget, and the Live Activity without duplication on disk.
+
+---
+
+### Case 1 — Bundled images (shipped with the app)
+
+Best for: a known, finite set of images (logos, badges, demo avatars, fixed driver roster).
+
+**Option A — Multi-target asset catalog (quickest)**
+
+1. Add the image set to *one* `Assets.xcassets`.
+2. Select the image set → **File Inspector → Target Membership** → tick **both** the app target and the widget extension.
+3. Reference it as usual: `Image("John")`.
+
+> ⚠️ Each ticked target gets its own copy of the image baked into its bundle, so app size grows roughly linearly with the number of targets sharing the asset.
+
+**Option B — Shared Swift Package (cleanest)**
+
+1. Create a local Swift Package (e.g. `SharedAssets`) with its own `Assets.xcassets`.
+2. Add the package as a dependency of every target that needs the image.
+3. Reference it with the package's bundle:
+   ```swift
+   Image("John", bundle: .module)
+   ```
+4. Result: one copy of the asset for the whole app — smaller binary, single source of truth.
+
+| | Multi-target catalog | Swift Package |
+| --- | --- | --- |
+| Setup | 30 seconds | A few minutes |
+| Storage | Duplicated per target | Single copy |
+| Asset name in code | `Image("John")` | `Image("John", bundle: .module)` |
+
+---
+
+### Case 2 — Downloaded images (fetched at runtime)
+
+Best for: user-generated content, unbounded sets (real driver photos, dynamic product imagery), anything that must change without an App Store release.
+
+Widget extensions and Live Activities **cannot perform network calls** during snapshot rendering, and `ActivityKit` `ContentState` payloads are capped at roughly 4 KB — so you cannot ship the image bytes inside the state. The pattern is: **the main app downloads, writes to a shared container, and the widget reads from disk.**
+
+**1. Enable App Groups on both targets**
+
+Xcode → *Signing & Capabilities* → add **App Groups** to the main app **and** the widget extension, both using the same identifier (e.g. `group.com.you.pizza`).
+
+**2. Main app — download and persist**
+
+```swift
+let groupID = "group.com.you.pizza"
+let container = FileManager.default
+    .containerURL(forSecurityApplicationGroupIdentifier: groupID)!
+
+func cacheAvatar(for driverID: String, from url: URL) async throws {
+    let (data, _) = try await URLSession.shared.data(from: url)
+    let dest = container.appendingPathComponent("\(driverID).png")
+    try data.write(to: dest, options: .atomic)
+}
+```
+
+**3. Activity state — pass an identifier, not the image bytes**
+
+```swift
+struct DeliveryAttributes: ActivityAttributes {
+    struct ContentState: Codable, Hashable {
+        var driverID: String   // e.g. "john_123" — NOT the image data
+        var estimatedDeliveryTime: ClosedRange<Date>
+    }
+}
+```
+
+**4. Widget — load from the shared container**
+
+```swift
+private func avatar(for driverID: String) -> Image {
+    let url = FileManager.default
+        .containerURL(forSecurityApplicationGroupIdentifier: "group.com.you.pizza")!
+        .appendingPathComponent("\(driverID).png")
+    if let ui = UIImage(contentsOfFile: url.path) {
+        return Image(uiImage: ui)
+    }
+    return Image(systemName: "person.crop.circle")   // graceful fallback
+}
+```
+
+**Important caveats**
+
+- The widget cannot trigger the download itself. Make sure the main app prefetches the image **before** calling `activity.request(...)` / `activity.update(...)`, otherwise the first snapshot will render the fallback.
+- `AsyncImage` does **not** work inside Live Activity / widget snapshots — there is no async render pass. Always pre-write to disk and read synchronously.
+- Keep cached images small (a few hundred KB max). Widget extensions have a tight memory budget — a giant image will cause the snapshot to be killed.
+- If the user wipes the app data or the cache is evicted, fall back to a `systemName` placeholder rather than crashing.
+
+### Quick chooser
+
+| Image source | Pick |
+| --- | --- |
+| Static, known at build time | **Case 1** (Swift Package preferred) |
+| Server-driven, per-user, or updated post-release | **Case 2** (App Group + shared container) |
+| Mixed — a few branded fallbacks plus dynamic content | Combine both: bundle the fallbacks via Case 1, cache the dynamic ones via Case 2 |
 
 ## Structure
 ![diagram](https://raw.githubusercontent.com/1998code/iOS16-Live-Activities/main/diagram.svg)
