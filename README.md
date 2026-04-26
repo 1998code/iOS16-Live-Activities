@@ -297,13 +297,18 @@ Console: Pizza delivery details: DA288E1B-F6F5-4BF1-AA73-E43E0CC13150 -> PizzaDe
 
 ## Sharing Images Across App, Widget & Live Activity 🖼️
 
-The main app, widget extension, and Live Activity are **three separate targets** with three separate bundles. An asset added to one target is **not** automatically visible to the others, and a widget extension cannot make network requests of its own. Pick the strategy that matches where your images come from.
+The main app and the widget extension are **separate targets with separate bundles** — in this project that's [`iOS16-Live-Activities`](iOS16-Live-Activities/) and [`WidgetDemo`](WidgetDemo/) (the `WidgetDemoExtension`). The Live Activity UI is **not** a third target: it's a `Widget` configured with `ActivityConfiguration` that lives inside the widget extension bundle, alongside any home-screen widgets. Two consequences:
+
+- An asset added to one target is **not** automatically visible to the other.
+- **During widget / Live Activity snapshot rendering** the extension cannot kick off a network fetch and wait for it — snapshots are synchronous and have a tight render budget. See Case 2 below for the correct pattern.
+
+Pick the strategy that matches where your images come from.
 
 ### Demo in this project
 
 The driver avatar shown next to the delivery bar (`John`) is loaded with `Image(context.state.driverName)` in [`WidgetDemo.swift`](WidgetDemo/WidgetDemo.swift). The asset name is driven by the `driverName` value passed in `ContentState`, so changing the driver in the main app automatically swaps the avatar — provided a matching image set exists in the widget's bundle.
 
-This project follows **Case 1 → Option A** below: the avatars (`Tim`, `John`) live in a shared catalog at [`Resources/Assets.xcassets`](Resources/Assets.xcassets) with **target membership ticked on both `iOS16-Live-Activities` and `WidgetDemo`**, so the same image set is reachable from the app, the widget, and the Live Activity without duplication on disk.
+This project follows **Case 1 → Option A** below: the avatars (`Tim`, `John`) live in a shared catalog at [`Resources/Assets.xcassets`](Resources/Assets.xcassets) with **target membership ticked on both `iOS16-Live-Activities` and `WidgetDemoExtension`**, so the same image set is reachable from the app, the widget, and the Live Activity. The avatars are tiny so the per-target duplication in `Assets.car` is acceptable here; for production assets where IPA size matters, **Option C (embedded dynamic framework)** is the most reliable single-copy approach.
 
 ---
 
@@ -319,7 +324,7 @@ Best for: a known, finite set of images (logos, badges, demo avatars, fixed driv
 
 > ⚠️ Each ticked target gets its own copy of the image baked into its bundle, so app size grows roughly linearly with the number of targets sharing the asset.
 
-**Option B — Shared Swift Package (cleanest)**
+**Option B — Shared Swift Package**
 
 1. Create a local Swift Package (e.g. `SharedAssets`) with its own `Assets.xcassets`.
 2. Add the package as a dependency of every target that needs the image.
@@ -327,13 +332,51 @@ Best for: a known, finite set of images (logos, badges, demo avatars, fixed driv
    ```swift
    Image("John", bundle: .module)
    ```
-4. Result: one copy of the asset for the whole app — smaller binary, single source of truth.
 
-| | Multi-target catalog | Swift Package |
-| --- | --- | --- |
-| Setup | 30 seconds | A few minutes |
-| Storage | Duplicated per target | Single copy |
-| Asset name in code | `Image("John")` | `Image("John", bundle: .module)` |
+> ⚠️ **SPM was not designed as a size-optimisation tool.** Apple's [SPM resources docs](https://developer.apple.com/documentation/xcode/bundling-resources-with-a-swift-package) state the public contract is "use `Bundle.module`, do not assume the bundle's exact location." Whether the same 2 MB image set ships once or twice depends on linkage **and** Xcode's per-target integration:
+>
+> | Library type | Likely outcome with App + Widget Extension |
+> | --- | --- |
+> | `.static` | Resource bundle copied into every consuming target → **2 × size** (no better than Option A) |
+> | `.automatic` (unspecified) | Behaves like `.static` for most Xcode integrations → not reliable for dedup |
+> | `.dynamic` (explicit) | Resources *can* live inside one `Frameworks/` framework → **1 × size** — but Xcode may still duplicate the package's resource bundle into the extension. Outcome is integration-dependent. |
+>
+> Setting `.dynamic` explicitly:
+> ```swift
+> .library(
+>     name: "SharedAssets",
+>     type: .dynamic,        // necessary, but not sufficient
+>     targets: ["SharedAssets"]
+> ),
+> ```
+> Because the result is not guaranteed by SPM's contract, **the only way to know is to archive and `unzip` the `.ipa`** to count how many `Assets.car` / `*.bundle` copies are present. If reliable single-copy is the goal, prefer Option C below.
+
+**Option C — Embedded Framework target (most reliable dedup)**
+
+1. Xcode → **File → New → Target → Framework**, e.g. `SharedAssets.framework`.
+2. Drop the `Assets.xcassets` into the framework target.
+3. **Embed & Sign once — only into the main app target.** In *Build Phases → Embed Frameworks*, the framework should appear under the **app target** (not the extension). The widget extension still **links** the framework (Build Phases → Link Binary With Libraries) but does **not** embed it — embedding it twice produces two copies in the IPA, defeating the dedup.
+4. Verify the extension's **runpath search paths** include `@executable_path/../../Frameworks` (Xcode usually sets this for embedded extensions, but confirm in *Build Settings → Runpath Search Paths*). This is what lets the extension's `dyld` find the framework that lives one level up in `MyApp.app/Frameworks/`.
+5. Reference with the framework's bundle from any consumer:
+   ```swift
+   Image("John", bundle: Bundle(for: SharedAssetsMarker.self))
+   // or expose a static helper inside the framework:
+   //   public enum SharedAssets { public static let bundle = Bundle(for: SharedAssetsMarker.self) }
+   //   Image("John", bundle: SharedAssets.bundle)
+   ```
+6. Result: a single `MyApp.app/Frameworks/SharedAssets.framework` shared by every target that **links it with the correct runpath**. **True 1× size — verify by archiving and counting `Assets.car` in the unzipped IPA.**
+
+### Comparison
+
+| | Option A (Multi-target catalog) | Option B (Swift Package) | Option C (Embedded Framework) |
+| --- | --- | --- | --- |
+| Setup | 30 seconds | A few minutes + `Package.swift` tweak | A few minutes (Xcode UI only) |
+| Storage for 2 MB image, 2 targets | **4 MB** (guaranteed) | **4 MB** with `.static` / `.automatic`; *possibly* **2 MB** with `.dynamic`, but not guaranteed | **2 MB** (most reliable single-copy) |
+| Single source of truth | ✅ source folder, ❌ on-disk (always 2×) | ✅ source, ⚠️ on-disk dedup not guaranteed | ✅ both |
+| Reference syntax | `Image("John")` | `Image("John", bundle: .module)` | `Image("John", bundle: SharedAssets.bundle)` |
+| Launch-time cost | None | None (static) / small dyld (dynamic) | Small dyld |
+| Verify on-disk outcome | Trivial — count `Assets.car` files (you're confirming the expected 2× duplication) | Must archive + `unzip` `.ipa` to confirm whether dedup actually happened | Should still archive + `unzip` `.ipa` to confirm exactly one `Assets.car` lives inside `Frameworks/SharedAssets.framework/` (and none in the extension bundle) |
+| Best for | Tiny shared assets, fastest setup | Multi-package projects, code sharing too | When minimising IPA size matters and dedup must be reliable |
 
 ---
 
@@ -397,7 +440,7 @@ private func avatar(for driverID: String) -> Image {
 
 | Image source | Pick |
 | --- | --- |
-| Static, known at build time | **Case 1** (Swift Package preferred) |
+| Static, known at build time | **Case 1** — pick **Option A** for tiny / simple sharing; **Option C** when strict IPA size matters and dedup must be reliable |
 | Server-driven, per-user, or updated post-release | **Case 2** (App Group + shared container) |
 | Mixed — a few branded fallbacks plus dynamic content | Combine both: bundle the fallbacks via Case 1, cache the dynamic ones via Case 2 |
 
